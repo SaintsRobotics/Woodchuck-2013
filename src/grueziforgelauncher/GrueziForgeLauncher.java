@@ -4,8 +4,27 @@
  */
 package grueziforgelauncher;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import javax.swing.JOptionPane;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 /**
  *
@@ -130,29 +149,164 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        String s=MinecraftLogin.getSessionID(jTextField1.getText(), jPasswordField1.getText());
-        if(s.contains("Bad login")){
+        String s = MinecraftLogin.getSessionID(jTextField1.getText(), jPasswordField1.getText());
+        if (s.contains("Bad login")) {
             JOptionPane.showMessageDialog(null, "Incorrect username or Password");
-        }else if(s.contains("User not premium")){
+        } else if (s.contains("User not premium")) {
             JOptionPane.showMessageDialog(null, "Account not premium");
-        }else{
+        } else {
             String[] split = s.split(":");
             String sessionID = split[3];
             System.out.println(split[3]);
-            
+
         }
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        String dataDir=System.getenv("APPDATA").concat("\\.grueziforge\\");
-        File f = new File(dataDir);
-        System.out.println(dataDir);
-        if(!f.exists()){
-        System.out.println(f.mkdir());
+jButton1.setEnabled(false);
+jButton2.setEnabled(false);
+jTextField1.setEnabled(false);
+jPasswordField1.setEnabled(false);
+jLabel1.setText("Updating...");
+String dataDir = System.getenv("APPDATA").concat("\\.grueziforge\\");
+        try {
+            
+            File f = new File(dataDir);
+            System.out.println(dataDir);
+            if (!f.exists()) {
+                System.out.println(f.mkdir());
+            }
+
+
+            System.out.println("Connecting...");
+            HttpClient client = new DefaultHttpClient();
+            HttpGet get = new HttpGet("http://bricinmc.bluepyjama.com/updates/latest.zip");
+            HttpResponse response = client.execute(get);
+
+            InputStream input = null;
+            OutputStream output = null;
+            byte[] buffer = new byte[1024];
+
+            try {
+                System.out.println("Downloading file...");
+                input = response.getEntity().getContent();
+                output = new FileOutputStream(new File(dataDir.concat("latest.zip")));
+                for (int length; (length = input.read(buffer)) > 0;) {
+                    output.write(buffer, 0, length);
+                }
+                System.out.println("File successfully downloaded!");
+            } finally {
+                if (output != null) try { output.close(); } catch (IOException logOrIgnore) {}
+                if (input != null) try { input.close(); } catch (IOException logOrIgnore) {}
+            }
+
+
+
+        } catch (IOException ex) {
+            Logger.getLogger(GrueziForgeLauncher.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
+File minecraftdir = new File(dataDir.concat("minecraft\\"));
+if(!minecraftdir.exists()){
+    minecraftdir.mkdir();
+}
+
+
+UnzipUtility unzipper = new UnzipUtility();
+        try {
+            unzipper.unzip(dataDir.concat("latest.zip"), dataDir.concat("minecraft\\"));
+        } catch (IOException ex) {
+            Logger.getLogger(GrueziForgeLauncher.class.getName()).log(Level.SEVERE, null, ex);
+        }
+JOptionPane.showMessageDialog(null, "Client updated!");
+
+
+        jButton1.setEnabled(true);
+jButton2.setEnabled(true);
+jTextField1.setEnabled(true);
+jPasswordField1.setEnabled(true);
+jLabel1.setText("GrueziForge Launcher");
     }//GEN-LAST:event_jButton2MouseClicked
 
+    
+    
+    
+    
+    public static final void writeFile(InputStream in, OutputStream out)
+			throws IOException {
+		byte[] buffer = new byte[1024];
+		int len;
+
+		while ((len = in.read(buffer)) >= 0)
+			out.write(buffer, 0, len);
+
+		in.close();
+		out.close();
+	}
+
+	public static void unzipMyZip(String zipFileName,
+			String directoryToExtractTo) {
+		Enumeration entriesEnum;
+		ZipFile zipFile;
+		try {
+			zipFile = new ZipFile(zipFileName);
+			entriesEnum = zipFile.entries();
+			
+			File directory= new File(directoryToExtractTo);
+			
+			/**
+			 * Check if the directory to extract to exists
+			 */
+			if(!directory.exists())
+			{
+				/** 
+				 * If not, create a new one.
+				 */
+				new File(directoryToExtractTo).mkdir();
+				System.err.println("...Directory Created -"+directoryToExtractTo);
+			}
+			while (entriesEnum.hasMoreElements()) {
+				try {
+					ZipEntry entry = (ZipEntry) entriesEnum.nextElement();
+
+					if (entry.isDirectory()) {
+						/** 
+						 * Currently not unzipping the directory structure. 
+						 * All the files will be unzipped in a Directory
+						 *  
+						 **/
+					} else {
+
+						System.err.println("Extracting file: "
+								+ entry.getName());
+						/**
+						 * The following logic will just extract the file name
+						 * and discard the directory
+						 */
+						int index = 0;
+						String name = entry.getName();
+						index = entry.getName().lastIndexOf("/");
+						if (index > 0 && index != name.length())
+							name = entry.getName().substring(index + 1);
+
+						System.out.println(name);
+
+						writeFile(zipFile.getInputStream(entry),
+								new BufferedOutputStream(new FileOutputStream(
+										directoryToExtractTo + name)));
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			zipFile.close();
+		} catch (IOException ioe) {
+			System.err.println("Some Exception Occurred:");
+			ioe.printStackTrace();
+			return;
+		}
+	}
     /**
      * @param args the command line arguments
      */
