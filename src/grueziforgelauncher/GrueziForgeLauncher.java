@@ -4,6 +4,8 @@
  */
 package grueziforgelauncher;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -59,6 +61,11 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GrueziForge Launcher");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -158,8 +165,23 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
             String[] split = s.split(":");
             String sessionID = split[3];
             System.out.println(split[3]);
-
-        }
+//            try {
+//               String[] env = new String[0];
+//               File operatingdir = new File(System.getenv("APPDATA").concat("\\.grueziforge\\minecraft\\"));
+//                Process p = Runtime.getRuntime().exec("java  -Xms512m -Xmx1024m -cp launcher ",env,operatingdir);
+//                
+//                System.out.println("java  -Xms512m -Xmx1024m -jar ".concat(System.getenv("APPDATA").concat("\\.grueziforge\\minecraft\\MultiMCLauncher.jar ")).concat(jTextField1.getText()).concat(" ").concat(sessionID).concat(" GrueziForge 854x480"));
+//            } catch (IOException ex) {
+//                Logger.getLogger(GrueziForgeLauncher.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+            String[] args = {split[2],split[3],"GrueziForge","",""};
+            setVisible(false);
+            MultiMCLauncher.launch(args);
+            
+            
+            
+            
+       }
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
@@ -227,6 +249,20 @@ jTextField1.setEnabled(true);
 jPasswordField1.setEnabled(true);
 jLabel1.setText("GrueziForge Launcher");
     }//GEN-LAST:event_jButton2MouseClicked
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // Get the size of the screen
+    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+    
+    // Determine the new location of the window
+    int w = this.getSize().width;
+    int h = this.getSize().height;
+    int x = (dim.width-w)/2;
+    int y = (dim.height-h)/2;
+    
+    // Move the window
+    this.setLocation(x, y);
+    }//GEN-LAST:event_formWindowOpened
 
     
     
