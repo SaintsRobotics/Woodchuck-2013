@@ -57,6 +57,7 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jPasswordField1 = new javax.swing.JPasswordField();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GrueziForge Launcher");
@@ -69,7 +70,7 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("GrueziForge Launcher");
+        jLabel1.setText("GreasyForge Launcher");
 
         jTextField1.setToolTipText("");
 
@@ -101,6 +102,13 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
             }
         });
 
+        jCheckBox1.setText("jCheckBox1");
+        jCheckBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCheckBox1ItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -119,6 +127,8 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
                             .addComponent(jPasswordField1)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jCheckBox1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)))
@@ -140,7 +150,8 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jCheckBox1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -148,14 +159,19 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        jButton1MouseClicked(null);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        jButton2MouseClicked(null);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        File operatingdir = new File(System.getenv("APPDATA").concat("\\.grueziforge\\minecraft\\"));
+        if(!operatingdir.exists()){
+            JOptionPane.showMessageDialog(null, "Please update first!");
+            return;
+        }
         String s = MinecraftLogin.getSessionID(jTextField1.getText(), jPasswordField1.getText());
         if (s.contains("Bad login")) {
             JOptionPane.showMessageDialog(null, "Incorrect username or Password");
@@ -263,6 +279,12 @@ jLabel1.setText("GrueziForge Launcher");
     // Move the window
     this.setLocation(x, y);
     }//GEN-LAST:event_formWindowOpened
+
+    private void jCheckBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox1ItemStateChanged
+       if(jCheckBox1.isSelected()){
+           jButton1MouseClicked(null);
+       }
+    }//GEN-LAST:event_jCheckBox1ItemStateChanged
 
     
     
@@ -380,6 +402,7 @@ jLabel1.setText("GrueziForge Launcher");
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
