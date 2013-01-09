@@ -40,6 +40,16 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
      */
     public GrueziForgeLauncher() {
         initComponents();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+    
+    // Determine the new location of the window
+    int w = this.getSize().width;
+    int h = this.getSize().height;
+    int x = (dim.width-w)/2;
+    int y = (dim.height-h)/2;
+    
+    // Move the window
+    this.setLocation(x, y);
     }
 
     /**
@@ -59,6 +69,7 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jPasswordField1 = new javax.swing.JPasswordField();
         jButton3 = new javax.swing.JButton();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GrueziForge Launcher");
@@ -110,6 +121,13 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
             }
         });
 
+        jCheckBox1.setText("Remember Me");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -117,7 +135,7 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -128,6 +146,8 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
                             .addComponent(jPasswordField1)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jCheckBox1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
@@ -152,7 +172,8 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(jButton3)
+                    .addComponent(jCheckBox1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -179,6 +200,9 @@ public class GrueziForgeLauncher extends javax.swing.JFrame {
         } else if (s.contains("User not premium")) {
             JOptionPane.showMessageDialog(null, "Account not premium");
         } else {
+            if(jCheckBox1.isSelected()){
+                RememberMe.saveAccount(this.jPasswordField1.getText(), this.jTextField1.getText(),new File(System.getenv("APPDATA").concat("\\.grueziforge\\account.")));
+            }
             String[] split = s.split(":");
             String sessionID = split[3];
             System.out.println(split[3]);
@@ -268,25 +292,23 @@ jLabel1.setText("GrueziForge Launcher");
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // Get the size of the screen
-    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-    
-    // Determine the new location of the window
-    int w = this.getSize().width;
-    int h = this.getSize().height;
-    int x = (dim.width-w)/2;
-    int y = (dim.height-h)/2;
-    
-    // Move the window
-    this.setLocation(x, y);
+        jTextField1.setText(RememberMe.readUsername(new File(System.getenv("APPDATA").concat("\\.grueziforge\\account."))));
+        jPasswordField1.setText(RememberMe.readPassword(new File(System.getenv("APPDATA").concat("\\.grueziforge\\account."))));
+        if(!jTextField1.getText().equals("")){
+            jCheckBox1.setSelected(true);
+        }
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         Random r = new Random();
-        String[] args = {"Offline"+r.nextInt(999),"0","GrueziForge","",""};
+        String[] args = {"Offline"+Integer.toString(r.nextInt()),"0","GrueziForge","",""};
             setVisible(false);
             MultiMCLauncher.launch(args);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     
     
@@ -405,6 +427,7 @@ jLabel1.setText("GrueziForge Launcher");
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
