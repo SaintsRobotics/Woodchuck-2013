@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javax.swing.JOptionPane;
+import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -232,6 +233,20 @@ jTextField1.setEnabled(false);
 jPasswordField1.setEnabled(false);
 jLabel1.setText("Updating...");
 String dataDir = System.getenv("APPDATA").concat("\\.grueziforge\\");
+File minecraftdir = new File(dataDir.concat("minecraft\\"));
+        try {
+            FileUtils.deleteDirectory(minecraftdir);
+        } catch (IOException ex) {
+            Logger.getLogger(GrueziForgeLauncher.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(GrueziForgeLauncher.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         try {
             
             File f = new File(dataDir);
@@ -269,7 +284,7 @@ String dataDir = System.getenv("APPDATA").concat("\\.grueziforge\\");
             Logger.getLogger(GrueziForgeLauncher.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-File minecraftdir = new File(dataDir.concat("minecraft\\"));
+
 if(!minecraftdir.exists()){
     minecraftdir.mkdir();
 }
