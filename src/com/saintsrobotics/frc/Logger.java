@@ -1,7 +1,7 @@
 package com.saintsrobotics.frc;
 
 /**
- * Logs all of the warnings and errors while running the robot.
+ * Logs any messages, warnings, and errors while running the robot.
  * @author Saints Robotics
  */
 public class Logger {
@@ -17,7 +17,7 @@ public class Logger {
     }
     
     /**
-     * Log the error messages by printing them out to the output panel.
+     * Log the message by printing it out to the output panel.
      * @param message 
      */
     public static void log(String message) {

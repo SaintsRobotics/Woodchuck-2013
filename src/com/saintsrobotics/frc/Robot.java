@@ -18,8 +18,11 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
  * directory.
  */
 public class Robot extends IterativeRobot {
+    private ControlSystem controlSystem;
+    private Drive drive;
     private DriverStationComm driverStation;
     private NetworkTable networkTable;
+    private Shooter shooter;
     private Vision vision;
     
     /**
@@ -30,24 +33,57 @@ public class Robot extends IterativeRobot {
         driverStation = new DriverStationComm();
         networkTable = getNetworkTable();
         vision = new Vision(networkTable);
+        drive = new Drive();
+        shooter = new Shooter(vision);
+        controlSystem = new ControlSystem(ControlSystem.LEFT_DRIVE_JOYSTICK_PORT,
+                ControlSystem.RIGHT_DRIVE_JOYSTICK_PORT,
+                ControlSystem.OPERATOR_JOYSTICK_PORT);
+    }
+    
+    /**
+     * This function is called at the beginning of autonomous.
+     */
+    public void autonomousInit() {
+        Logger.log("Autonomous has begun!");
     }
 
     /**
-     * This function is called periodically during autonomous
+     * This function is called periodically during autonomous.
      */
     public void autonomousPeriodic() {
 
     }
-
+    
     /**
-     * This function is called periodically during operator control
+     * This function is called at the beginning of operator control.
+     */
+    public void teleopInit() {
+        Logger.log("Teleop has begun!");
+    }
+    
+    /**
+     * This function is called periodically during operator control.
      */
     public void teleopPeriodic() {
         
     }
     
     /**
-     * This function is called periodically during test mode
+     * This function is called at the beginning of disabled mode.
+     */
+    public void disabledInit() {
+        Logger.log("The robot has been disabled :(");
+    }
+    
+    /**
+     * This function is called at the beginning of test mode.
+     */
+    public void testInit() {
+        Logger.log("Test mode has begun.");
+    }
+    
+    /**
+     * This function is called periodically during test mode.
      */
     public void testPeriodic() {
     
