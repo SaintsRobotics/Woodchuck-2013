@@ -5,10 +5,10 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package edu.wpi.first.wpilibj.templates;
-
+package com.saintsrobotics.frc;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -18,12 +18,18 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * directory.
  */
 public class Robot extends IterativeRobot {
+    private DriverStationComm driverStation;
+    private NetworkTable networkTable;
+    private Vision vision;
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
-
+        driverStation = new DriverStationComm();
+        networkTable = getNetworkTable();
+        vision = new Vision(networkTable);
     }
 
     /**
@@ -47,4 +53,20 @@ public class Robot extends IterativeRobot {
     
     }
     
+    /**
+     * Setup Network Tables, and get the NetworkTable for the SmartDashboard.
+     * @return The network table for the SmartDashboard.
+     */
+    private NetworkTable getNetworkTable() {
+        NetworkTable.setTeam(1899);
+        NetworkTable.setServerMode();
+        try {
+            NetworkTable.initialize();
+        }
+        catch (Exception exception) {
+            Logger.log(exception);
+        }
+        
+        return NetworkTable.getTable("SmartDashboard");
+    }
 }
