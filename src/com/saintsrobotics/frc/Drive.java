@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.CANJaguar;
  * The drive system for the robot.
  * @author Saints Robotics
  */
-public abstract class Drive {
+public class Drive {
     // CANJaguar IDs
     public static int CANJAGUAR_FRONT_LEFT_ID = 1;
     public static int CANJAGUAR_FRONT_RIGHT_ID = 2;
@@ -29,5 +29,13 @@ public abstract class Drive {
         catch (Exception exception) {
             Logger.log(exception);
         }
+    }
+    
+    public void tankDrive(double leftValue, double rightValue) {
+        
+    }
+    
+    public void arcadeDrive(double moveValue, double rotateValue) {
+        
     }
 }

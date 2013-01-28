@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
         driverStation = new DriverStationComm();
         networkTable = getNetworkTable();
         vision = new Vision(networkTable);
-        drive = new TankDrive(
+        drive = new Drive(
                 Drive.CANJAGUAR_FRONT_LEFT_ID, Drive.CANJAGUAR_FRONT_RIGHT_ID,
                 Drive.CANJAGUAR_BACK_LEFT_ID, Drive.CANJAGUAR_BACK_RIGHT_ID);
         shooter = new Shooter(vision);
