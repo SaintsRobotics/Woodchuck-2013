@@ -7,9 +7,10 @@ import edu.wpi.first.wpilibj.Joystick;
  * @author Saints Robotics
  */
 public class ControlSystem {
-    public static int LEFT_DRIVE_JOYSTICK_PORT = 1;
-    public static int RIGHT_DRIVE_JOYSTICK_PORT = 2;
-    public static int OPERATOR_JOYSTICK_PORT = 3;
+    // USB ports for the joysticks
+    public static int JOYSTICK_LEFT_DRIVE_PORT = 1;
+    public static int JOYSTICK_RIGHT_DRIVE_PORT = 2;
+    public static int JOYSTICK_OPERATOR_PORT = 3;
     
     private Joystick leftDriveJoystick;
     private Joystick rightDriveJoystick;
