@@ -18,11 +18,8 @@ public class Drive {
     public static final boolean CANJAGUAR_BACK_LEFT_INVERTED = false;
     public static final boolean CANJAGUAR_BACK_RIGHT_INVERTED = false;
     
-    // Other constants
-    private final double MAX_SPEED = 30; // NEEDS TO BE TESTED AND CHANGED
-    
     private final CANJaguar.ControlMode CANJAGUAR_CONTROL_MODE =
-            CANJaguar.ControlMode.kSpeed;
+            CANJaguar.ControlMode.kPercentVbus;
     private final CANJaguar.NeutralMode CANJAGUAR_NEUTRAL_MODE =
             CANJaguar.NeutralMode.kBrake;
     
@@ -109,14 +106,14 @@ public class Drive {
         }
     }
     
-    public double limit(double speed) {
-        if (speed > MAX_SPEED) {
-            return MAX_SPEED;
+    public double limit(double value) {
+        if (value > 1) {
+            return 1;
         }
-        if (speed < -MAX_SPEED) {
-            return -MAX_SPEED;
+        if (value < -1) {
+            return -1;
         }
         
-        return speed;
+        return value;
     }
 }
