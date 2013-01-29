@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class ControlSystem {
     // USB ports for the joysticks
-    public static int JOYSTICK_LEFT_DRIVE_PORT = 1;
-    public static int JOYSTICK_RIGHT_DRIVE_PORT = 2;
-    public static int JOYSTICK_OPERATOR_PORT = 3;
+    public static final int JOYSTICK_LEFT_DRIVE_PORT = 1;
+    public static final int JOYSTICK_RIGHT_DRIVE_PORT = 2;
+    public static final int JOYSTICK_OPERATOR_PORT = 3;
     
     private Joystick leftDriveJoystick;
     private Joystick rightDriveJoystick;

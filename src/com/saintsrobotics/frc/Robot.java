@@ -35,7 +35,9 @@ public class Robot extends IterativeRobot {
         vision = new Vision(networkTable);
         drive = new Drive(
                 Drive.CANJAGUAR_FRONT_LEFT_ID, Drive.CANJAGUAR_FRONT_RIGHT_ID,
-                Drive.CANJAGUAR_BACK_LEFT_ID, Drive.CANJAGUAR_BACK_RIGHT_ID);
+                Drive.CANJAGUAR_BACK_LEFT_ID, Drive.CANJAGUAR_BACK_RIGHT_ID,
+                Drive.CANJAGUAR_FRONT_LEFT_INVERTED, Drive.CANJAGUAR_FRONT_RIGHT_INVERTED,
+                Drive.CANJAGUAR_BACK_LEFT_INVERTED, Drive.CANJAGUAR_BACK_RIGHT_INVERTED);
         shooter = new Shooter(vision);
         controlSystem = new ControlSystem(
                 ControlSystem.JOYSTICK_LEFT_DRIVE_PORT,
