@@ -5,6 +5,9 @@ package com.saintsrobotics.frc;
  * @author Saints Robotics
  */
 public class Logger {
+    /**
+     * Disallow instantiation.
+     */
     private Logger() {}
     
     /**

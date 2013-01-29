@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.CANJaguar;
  * @author Saints Robotics
  */
 public class Drive {
-    // CANJaguar constants
+    // Constants
     public static final int CANJAGUAR_FRONT_LEFT_ID = 1;
     public static final int CANJAGUAR_FRONT_RIGHT_ID = 2;
     public static final int CANJAGUAR_BACK_LEFT_ID = 3;
@@ -23,6 +23,7 @@ public class Drive {
     private final CANJaguar.NeutralMode CANJAGUAR_NEUTRAL_MODE =
             CANJaguar.NeutralMode.kBrake;
     
+    // Instance variables
     private CANJaguar frontLeftMotor;
     private CANJaguar frontRightMotor;
     private CANJaguar backLeftMotor;
