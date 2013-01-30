@@ -8,19 +8,19 @@ import edu.wpi.first.wpilibj.CANJaguar;
  */
 public class Drive {
     // Constants
-    public static final int CANJAGUAR_FRONT_LEFT_ID = 1;
-    public static final int CANJAGUAR_FRONT_RIGHT_ID = 2;
-    public static final int CANJAGUAR_BACK_LEFT_ID = 3;
-    public static final int CANJAGUAR_BACK_RIGHT_ID = 4;
+    private static final int CANJAGUAR_FRONT_LEFT_ID = 1;
+    private static final int CANJAGUAR_FRONT_RIGHT_ID = 2;
+    private static final int CANJAGUAR_BACK_LEFT_ID = 3;
+    private static final int CANJAGUAR_BACK_RIGHT_ID = 4;
     
-    public static final boolean CANJAGUAR_FRONT_LEFT_INVERTED = false;
-    public static final boolean CANJAGUAR_FRONT_RIGHT_INVERTED = false;
-    public static final boolean CANJAGUAR_BACK_LEFT_INVERTED = false;
-    public static final boolean CANJAGUAR_BACK_RIGHT_INVERTED = false;
+    private static final boolean CANJAGUAR_FRONT_LEFT_INVERTED = false;
+    private static final boolean CANJAGUAR_FRONT_RIGHT_INVERTED = false;
+    private static final boolean CANJAGUAR_BACK_LEFT_INVERTED = false;
+    private static final boolean CANJAGUAR_BACK_RIGHT_INVERTED = false;
     
-    private final CANJaguar.ControlMode CANJAGUAR_CONTROL_MODE =
+    private static final CANJaguar.ControlMode CANJAGUAR_CONTROL_MODE =
             CANJaguar.ControlMode.kPercentVbus;
-    private final CANJaguar.NeutralMode CANJAGUAR_NEUTRAL_MODE =
+    private static final CANJaguar.NeutralMode CANJAGUAR_NEUTRAL_MODE =
             CANJaguar.NeutralMode.kBrake;
     
     // Instance variables
@@ -31,23 +31,19 @@ public class Drive {
     
     private int[] motorsInverted = new int[4];
     
-    public Drive(int frontLeftMotorID, int frontRightMotorID,
-            int backLeftMotorID, int backRightMotorID,
-            boolean frontLeftMotorInverted, boolean frontRightMotorInverted,
-            boolean backLeftMotorInverted, boolean backRightMotorInverted) {
+    public Drive() {
         try {
-            frontLeftMotor = new CANJaguar(frontLeftMotorID);
-            frontRightMotor = new CANJaguar(frontRightMotorID);
-            backLeftMotor = new CANJaguar(backLeftMotorID);
-            backRightMotor = new CANJaguar(backRightMotorID);
+            frontLeftMotor = new CANJaguar(CANJAGUAR_FRONT_LEFT_ID);
+            frontRightMotor = new CANJaguar(CANJAGUAR_FRONT_RIGHT_ID);
+            backLeftMotor = new CANJaguar(CANJAGUAR_BACK_LEFT_ID);
+            backRightMotor = new CANJaguar(CANJAGUAR_BACK_RIGHT_ID);
         }
         catch (Exception exception) {
             Logger.log(exception);
         }
         
         init();
-        invertMotors(frontLeftMotorInverted, frontRightMotorInverted,
-                backLeftMotorInverted, backRightMotorInverted);
+        invertMotors();
     }
     
     private void init() {
@@ -68,12 +64,11 @@ public class Drive {
         }
     }
     
-    private void invertMotors(boolean frontLeftMotorInverted, boolean frontRightMotorInverted,
-            boolean backLeftMotorInverted, boolean backRightMotorInverted) {
-        motorsInverted[0] = (frontLeftMotorInverted ? 1 : -1);
-        motorsInverted[1] = (frontRightMotorInverted ? 1 : -1);
-        motorsInverted[2] = (backLeftMotorInverted ? 1 : -1);
-        motorsInverted[3] = (backRightMotorInverted ? 1 : -1);
+    private void invertMotors() {
+        motorsInverted[0] = (CANJAGUAR_FRONT_LEFT_INVERTED ? 1 : -1);
+        motorsInverted[1] = (CANJAGUAR_FRONT_RIGHT_INVERTED ? 1 : -1);
+        motorsInverted[2] = (CANJAGUAR_BACK_LEFT_INVERTED ? 1 : -1);
+        motorsInverted[3] = (CANJAGUAR_BACK_RIGHT_INVERTED ? 1 : -1);
     }
     
     public void tankDrive(double leftValue, double rightValue) {
