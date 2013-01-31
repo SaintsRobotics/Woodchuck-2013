@@ -24,51 +24,40 @@ public class Drive {
             CANJaguar.NeutralMode.kBrake;
     
     // Instance variables
-    private CANJaguar frontLeftMotor;
-    private CANJaguar frontRightMotor;
-    private CANJaguar backLeftMotor;
-    private CANJaguar backRightMotor;
-    
-    private int[] motorsInverted = new int[4];
+    private Motor frontLeftMotor;
+    private Motor frontRightMotor;
+    private Motor backLeftMotor;
+    private Motor backRightMotor;
     
     public Drive() {
-        try {
-            frontLeftMotor = new CANJaguar(CANJAGUAR_FRONT_LEFT_ID);
-            frontRightMotor = new CANJaguar(CANJAGUAR_FRONT_RIGHT_ID);
-            backLeftMotor = new CANJaguar(CANJAGUAR_BACK_LEFT_ID);
-            backRightMotor = new CANJaguar(CANJAGUAR_BACK_RIGHT_ID);
-        }
-        catch (Exception exception) {
-            Logger.log(exception);
-        }
+        frontLeftMotor = new Motor(CANJAGUAR_FRONT_LEFT_ID,
+                CANJAGUAR_FRONT_LEFT_INVERTED);
+        frontRightMotor = new Motor(CANJAGUAR_FRONT_RIGHT_ID,
+                CANJAGUAR_FRONT_RIGHT_INVERTED);
+        backLeftMotor = new Motor(CANJAGUAR_BACK_LEFT_ID,
+                CANJAGUAR_BACK_LEFT_INVERTED);
+        backRightMotor = new Motor(CANJAGUAR_BACK_RIGHT_ID,
+                CANJAGUAR_BACK_RIGHT_INVERTED);
         
         init();
-        invertMotors();
     }
     
     private void init() {
         try {
             // Set all motors to have the same modes
-            frontLeftMotor.changeControlMode(CANJAGUAR_CONTROL_MODE);
-            frontRightMotor.changeControlMode(CANJAGUAR_CONTROL_MODE);
-            backLeftMotor.changeControlMode(CANJAGUAR_CONTROL_MODE);
-            backRightMotor.changeControlMode(CANJAGUAR_CONTROL_MODE);
+            frontLeftMotor.motor.changeControlMode(CANJAGUAR_CONTROL_MODE);
+            frontRightMotor.motor.changeControlMode(CANJAGUAR_CONTROL_MODE);
+            backLeftMotor.motor.changeControlMode(CANJAGUAR_CONTROL_MODE);
+            backRightMotor.motor.changeControlMode(CANJAGUAR_CONTROL_MODE);
             
-            frontLeftMotor.configNeutralMode(CANJAGUAR_NEUTRAL_MODE);
-            frontRightMotor.configNeutralMode(CANJAGUAR_NEUTRAL_MODE);
-            backLeftMotor.configNeutralMode(CANJAGUAR_NEUTRAL_MODE);
-            backRightMotor.configNeutralMode(CANJAGUAR_NEUTRAL_MODE);
+            frontLeftMotor.motor.configNeutralMode(CANJAGUAR_NEUTRAL_MODE);
+            frontRightMotor.motor.configNeutralMode(CANJAGUAR_NEUTRAL_MODE);
+            backLeftMotor.motor.configNeutralMode(CANJAGUAR_NEUTRAL_MODE);
+            backRightMotor.motor.configNeutralMode(CANJAGUAR_NEUTRAL_MODE);
         }
         catch (Exception exception) {
             Logger.log(exception);
         }
-    }
-    
-    private void invertMotors() {
-        motorsInverted[0] = (CANJAGUAR_FRONT_LEFT_INVERTED ? 1 : -1);
-        motorsInverted[1] = (CANJAGUAR_FRONT_RIGHT_INVERTED ? 1 : -1);
-        motorsInverted[2] = (CANJAGUAR_BACK_LEFT_INVERTED ? 1 : -1);
-        motorsInverted[3] = (CANJAGUAR_BACK_RIGHT_INVERTED ? 1 : -1);
     }
     
     public void tankDrive(double leftValue, double rightValue) {
@@ -76,10 +65,10 @@ public class Drive {
         rightValue = limit(rightValue);
         
         try {
-            frontLeftMotor.setX(motorsInverted[0] * leftValue);
-            frontRightMotor.setX(motorsInverted[1] * rightValue);
-            backLeftMotor.setX(motorsInverted[2] * leftValue);
-            backRightMotor.setX(motorsInverted[3] * rightValue);
+            frontLeftMotor.motor.setX(frontLeftMotor.invert() * leftValue);
+            frontRightMotor.motor.setX(frontRightMotor.invert() * rightValue);
+            backLeftMotor.motor.setX(backLeftMotor.invert() * leftValue);
+            backRightMotor.motor.setX(backRightMotor.invert() * rightValue);
         }
         catch (Exception exception) {
             Logger.log(exception);
@@ -92,10 +81,10 @@ public class Drive {
     
     public void stopDrive() {
         try {
-            frontLeftMotor.setX(0);
-            frontRightMotor.setX(0);
-            backLeftMotor.setX(0);
-            backRightMotor.setX(0);
+            frontLeftMotor.motor.setX(0);
+            frontRightMotor.motor.setX(0);
+            backLeftMotor.motor.setX(0);
+            backRightMotor.motor.setX(0);
         }
         catch (Exception exception) {
             Logger.log(exception);
