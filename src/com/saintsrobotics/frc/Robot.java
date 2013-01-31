@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
  * directory.
  */
 public class Robot extends IterativeRobot {
-    private ControlSystem controlSystem;
+    private JoystickControl controlSystem;
     private Drive drive;
     private DriverStationComm driverStation;
     private NetworkTable networkTable;
@@ -35,7 +35,7 @@ public class Robot extends IterativeRobot {
         vision = new Vision(networkTable);
         drive = new Drive();
         shooter = new Shooter(vision);
-        controlSystem = new ControlSystem();
+        controlSystem = new JoystickControl();
     }
     
     /**
