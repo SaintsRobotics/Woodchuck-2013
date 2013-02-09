@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj.DriverStationLCD;
  * @author Saints Robotics
  */
 public class DriverStationComm {
-    private DriverStation driverStation;
-    private DriverStationEnhancedIO enhancedIO;
-    private DriverStationLCD LCD;
+    private static DriverStation driverStation;
+    private static DriverStationEnhancedIO enhancedIO;
+    private static DriverStationLCD LCD;
     
-    public DriverStationComm() {
+    static {
         driverStation = DriverStation.getInstance();
         enhancedIO = driverStation.getEnhancedIO();
         LCD = DriverStationLCD.getInstance();
@@ -25,7 +25,7 @@ public class DriverStationComm {
      * @param startingColumn
      * @param booleanMessage 
      */
-    public void printMessage(DriverStationLCD.Line line, int startingColumn,
+    public static void printMessage(DriverStationLCD.Line line, int startingColumn,
             boolean booleanMessage) {
         String message = (booleanMessage ? "True" : "False");
         printMessage(line, startingColumn, message);
@@ -37,7 +37,7 @@ public class DriverStationComm {
      * @param startingColumn
      * @param message 
      */
-    public void printMessage(DriverStationLCD.Line line, int startingColumn,
+    public static void printMessage(DriverStationLCD.Line line, int startingColumn,
             String message) {
         String shortenedMessage = shortenMessage(message);
         LCD.println(line, startingColumn, shortenedMessage);
@@ -49,7 +49,7 @@ public class DriverStationComm {
      * @param channel
      * @param on 
      */
-    public void setLED(int channel, boolean on) {
+    public static void setLED(int channel, boolean on) {
         try {
             enhancedIO.setLED(channel, on);
         }
@@ -63,7 +63,7 @@ public class DriverStationComm {
      * @param message
      * @return 
      */
-    private String shortenMessage(String message) {
+    private static String shortenMessage(String message) {
         return message.substring(0, DriverStationLCD.kLineLength);
     }
 }
