@@ -13,7 +13,7 @@ public class DriverStationComm {
     private static DriverStationEnhancedIO enhancedIO;
     private static DriverStationLCD LCD;
     
-    static {
+    static{
         driverStation = DriverStation.getInstance();
         enhancedIO = driverStation.getEnhancedIO();
         LCD = DriverStationLCD.getInstance();

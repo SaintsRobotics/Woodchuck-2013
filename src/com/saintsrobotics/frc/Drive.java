@@ -60,25 +60,6 @@ public class Drive {
         }
     }
     
-    public void drive(JoystickControl controller)
-    {
-        if(controller.getControlMode().value == JoystickControl.ControlMode.arcadeDrive.value)
-        {
-            tankDrive(controller.getArcadeValues());
-        }
-        else
-        {
-            arcadeDrive(controller.getTankValues());
-        }
-    }
-    
-    //Index 0: left side motor value
-    //Index 1: right side motor value
-    public void tankDrive(double[] motorValues)
-    {
-        tankDrive(motorValues[0], motorValues[1]);
-    }
-    
     public void tankDrive(double leftValue, double rightValue) {
         leftValue = limit(leftValue);
         rightValue = limit(rightValue);
@@ -94,29 +75,8 @@ public class Drive {
         }
     }
     
-    //Index 0: throttle value
-    //Index 1: turning value
-    public void arcadeDrive(double[] motorValues)
-    {
-        arcadeDrive(motorValues[0], motorValues[1]);
-    }
-    
     public void arcadeDrive(double moveValue, double rotateValue) {
-        double leftValue = moveValue + rotateValue;
-        double rightValue = moveValue - rotateValue;
-        double[] motorValues = scale( new double[]{ leftValue, rightValue } );
         
-        try
-        {
-            frontLeftMotor.motor.setX(frontLeftMotor.invert() * motorValues[0]);
-            frontRightMotor.motor.setX(frontRightMotor.invert() * motorValues[1]);
-            backLeftMotor.motor.setX(backLeftMotor.invert() * motorValues[0]);
-            backRightMotor.motor.setX(backRightMotor.invert() * motorValues[1]);
-        }
-        catch (Exception e)
-        {
-            Logger.log(e);
-        }
     }
     
     public void stopDrive() {
@@ -140,31 +100,5 @@ public class Drive {
         }
         
         return value;
-    }
-    
-    public double[] scale (double[] values)
-    {
-        double scale = 1.0;
-        double newValues[] = new double[values.length];
-        
-        for(int i = 0; i < values.length; i++)
-        {
-            double currentScale = 1 / Math.abs(values[i]);
-            scale = scale > currentScale ? currentScale : scale;
-        }
-        
-        if(scale < 1.0)
-        {
-            for(int i = 0; i < values.length; i++)
-            {
-                newValues[i] = scale * values[i];
-            }
-            
-            return newValues;
-        }
-        else
-        {
-            return values;
-        }
     }
 }
