@@ -20,22 +20,24 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 public class Robot extends IterativeRobot {
     private JoystickControl controlSystem;
     private Drive drive;
-    private DriverStationComm driverStation;
     private NetworkTable networkTable;
     private Shooter shooter;
     private Vision vision;
+    
+    private IRobotComponent[] components;
     
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
-        driverStation = new DriverStationComm();
         networkTable = getNetworkTable();
-        vision = new Vision(networkTable);
-        drive = new Drive();
-        shooter = new Shooter(vision);
         controlSystem = new JoystickControl();
+        vision = new Vision(networkTable);
+        drive = new Drive(controlSystem);
+        shooter = new Shooter(vision);
+        
+        components = new IRobotComponent[]{ controlSystem, vision, drive, shooter };
     }
     
     /**
@@ -43,6 +45,7 @@ public class Robot extends IterativeRobot {
      */
     public void autonomousInit() {
         Logger.log("Autonomous has begun!");
+        enabledRoutine();
     }
 
     /**
@@ -57,13 +60,14 @@ public class Robot extends IterativeRobot {
      */
     public void teleopInit() {
         Logger.log("Teleop has begun!");
+        enabledRoutine();
     }
     
     /**
      * This function is called periodically during operator control.
      */
     public void teleopPeriodic() {
-        drive.drive(controlSystem);
+        actionRoutine();
     }
     
     /**
@@ -71,6 +75,7 @@ public class Robot extends IterativeRobot {
      */
     public void disabledInit() {
         Logger.log("The robot has been disabled :(");
+        disabledRoutine();
     }
     
     /**
@@ -102,5 +107,29 @@ public class Robot extends IterativeRobot {
         }
         
         return NetworkTable.getTable("SmartDashboard");
+    }
+    
+    private void disabledRoutine()
+    {
+        for(int i = 0; i < components.length; i++)
+        {
+            components[i].robotDisable();
+        }
+    }
+    
+    private void enabledRoutine()
+    {
+        for(int i = 0; i < components.length; i++)
+        {
+            components[i].robotEnable();
+        }
+    }
+    
+    private void actionRoutine()
+    {
+        for(int i = 0; i < components.length; i++)
+        {
+            components[i].act();
+        }
     }
 }

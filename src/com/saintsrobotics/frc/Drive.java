@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.CANJaguar;
  * The drive system for the robot.
  * @author Saints Robotics
  */
-public class Drive {
+public class Drive implements IRobotComponent {
     // Constants
     private static final int CANJAGUAR_FRONT_LEFT_ID = 1;
     private static final int CANJAGUAR_FRONT_RIGHT_ID = 2;
@@ -23,13 +23,15 @@ public class Drive {
     private static final CANJaguar.NeutralMode CANJAGUAR_NEUTRAL_MODE =
             CANJaguar.NeutralMode.kBrake;
     
+    private JoystickControl controller;
+    
     // Instance variables
     private Motor frontLeftMotor;
     private Motor frontRightMotor;
     private Motor backLeftMotor;
     private Motor backRightMotor;
     
-    public Drive() {
+    public Drive(JoystickControl controller) {
         frontLeftMotor = new Motor(CANJAGUAR_FRONT_LEFT_ID,
                 CANJAGUAR_FRONT_LEFT_INVERTED);
         frontRightMotor = new Motor(CANJAGUAR_FRONT_RIGHT_ID,
@@ -38,6 +40,8 @@ public class Drive {
                 CANJAGUAR_BACK_LEFT_INVERTED);
         backRightMotor = new Motor(CANJAGUAR_BACK_RIGHT_ID,
                 CANJAGUAR_BACK_RIGHT_INVERTED);
+        
+        this.controller = controller;
         
         init();
     }
@@ -60,7 +64,7 @@ public class Drive {
         }
     }
     
-    public void drive(JoystickControl controller)
+    public void act()
     {
         if(controller.getControlMode().value == JoystickControl.ControlMode.arcadeDrive.value)
         {
@@ -166,5 +170,11 @@ public class Drive {
         {
             return values;
         }
+    }
+
+    public void robotDisable() {
+    }
+
+    public void robotEnable() {
     }
 }

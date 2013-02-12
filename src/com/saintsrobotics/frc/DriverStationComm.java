@@ -19,6 +19,8 @@ public class DriverStationComm {
         LCD = DriverStationLCD.getInstance();
     }
     
+    private DriverStationComm() {};
+    
     /**
      * Print a boolean message to the User Messages box.
      * @param line

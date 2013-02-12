@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.Joystick;
  * The joystick control for the robot.
  * @author Saints Robotics
  */
-public class JoystickControl {
+public class JoystickControl implements IRobotComponent {
     // USB ports for the joysticks
     private static final int JOYSTICK_LEFT_DRIVE_PORT = 1;
     private static final int JOYSTICK_RIGHT_DRIVE_PORT = 2;
@@ -30,6 +30,15 @@ public class JoystickControl {
     private static final int ARCADE_TURN_JOYSTICK_AXIS = 2;
     
     private ControlMode controlMode;
+
+    public void robotDisable() {
+    }
+
+    public void robotEnable() {
+    }
+
+    public void act() {
+    }
     
     public static class ControlMode{
         public final int value;

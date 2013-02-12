@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
  * Implement vision targeting for the robot.
  * @author Saints Robotics
  */
-public class Vision {
+public class Vision implements IRobotComponent {
     private NetworkTable table;
     
     public Vision(NetworkTable table) {
@@ -46,5 +46,14 @@ public class Vision {
         }
         
         return angle;
+    }
+
+    public void robotDisable() {
+    }
+
+    public void robotEnable() {
+    }
+
+    public void act() {
     }
 }
