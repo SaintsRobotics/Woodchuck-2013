@@ -31,13 +31,31 @@ public class JoystickControl implements IRobotComponent {
     
     private ControlMode controlMode;
 
+    private double tankLeftValue = 0.0;
+    private double tankRightValue = 0.0;
+    private double arcadeThrottleValue = 0.0;
+    private double arcadeTurnValue = 0.0;
+    private double shooterValue = 0.0;
+    
     public void robotDisable() {
     }
 
     public void robotEnable() {
+        tankLeftValue = 0.0;
+        tankRightValue = 0.0;
+        arcadeThrottleValue = 0.0;
+        arcadeTurnValue = 0.0;
+        shooterValue = 0.0;
     }
 
     public void act() {
+        tankLeftValue = TANK_LEFT_JOYSTICK.getRawAxis(TANK_LEFT_JOYSTICK_AXIS);
+        tankRightValue = TANK_RIGHT_JOYSTICK.getRawAxis(TANK_RIGHT_JOYSTICK_AXIS);
+        arcadeThrottleValue = ARCADE_THROTTLE_JOYSTICK.getRawAxis(ARCADE_THROTTLE_JOYSTICK_AXIS);
+        arcadeTurnValue = ARCADE_TURN_JOYSTICK.getRawAxis(ARCADE_TURN_JOYSTICK_AXIS);
+        
+        //TODO: STUB
+        shooterValue = 0.0;
     }
     
     public static class ControlMode{
@@ -83,11 +101,11 @@ public class JoystickControl implements IRobotComponent {
     
     public double[] getTankValues()
     {
-        return new double[]{ TANK_LEFT_JOYSTICK.getRawAxis(TANK_LEFT_JOYSTICK_AXIS), TANK_RIGHT_JOYSTICK.getRawAxis(TANK_RIGHT_JOYSTICK_AXIS) };
+        return new double[]{ tankLeftValue, tankRightValue };
     }
     
     public double[] getArcadeValues()
     {
-        return new double[]{ ARCADE_THROTTLE_JOYSTICK.getRawAxis(ARCADE_THROTTLE_JOYSTICK_AXIS), ARCADE_TURN_JOYSTICK.getRawAxis(ARCADE_TURN_JOYSTICK_AXIS) };
+        return new double[]{ arcadeThrottleValue, arcadeTurnValue };
     }
 }
