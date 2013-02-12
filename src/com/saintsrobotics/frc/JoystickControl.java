@@ -13,9 +13,6 @@ public class JoystickControl {
     private static final int JOYSTICK_RIGHT_DRIVE_PORT = 2;
     private static final int JOYSTICK_OPERATOR_PORT = 3;
     
-    // Constant to convert joystick value to between -1 to 1
-    private final int JOYSTICK_CONSTANT = 200;
-    
     private Joystick leftDriveJoystick;
     private Joystick rightDriveJoystick;
     private Joystick operatorJoystick;
@@ -75,11 +72,13 @@ public class JoystickControl {
         return controlMode;
     }
     
-    public double readRightJoystickX() {
-        return leftDriveJoystick.getRawAxis(2) / JOYSTICK_CONSTANT;
+    public double[] getTankValues()
+    {
+        return new double[]{ TANK_LEFT_JOYSTICK.getRawAxis(TANK_LEFT_JOYSTICK_AXIS), TANK_RIGHT_JOYSTICK.getRawAxis(TANK_RIGHT_JOYSTICK_AXIS) };
     }
     
-    public double readRightJoystickY() {
-        return leftDriveJoystick.getRawAxis(1) / JOYSTICK_CONSTANT;
+    public double[] getArcadeValues()
+    {
+        return new double[]{ ARCADE_THROTTLE_JOYSTICK.getRawAxis(ARCADE_THROTTLE_JOYSTICK_AXIS), ARCADE_TURN_JOYSTICK.getRawAxis(ARCADE_TURN_JOYSTICK_AXIS) };
     }
 }
