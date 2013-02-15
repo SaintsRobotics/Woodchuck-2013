@@ -29,6 +29,10 @@ public class JoystickControl implements IRobotComponent {
     private static final int ARCADE_THROTTLE_JOYSTICK_AXIS = 1;
     private static final int ARCADE_TURN_JOYSTICK_AXIS = 2;
     
+    private static final int SHOOTER_UP_BUTTON = 5;
+    private static final int SHOOTER_DOWN_BUTTON = 6;
+    private static final int SHOOTER_FEED_BUTTON = 8;
+    
     private ControlMode controlMode;
 
     private double tankLeftValue = 0.0;
@@ -36,6 +40,7 @@ public class JoystickControl implements IRobotComponent {
     private double arcadeThrottleValue = 0.0;
     private double arcadeTurnValue = 0.0;
     private double shooterValue = 0.0;
+    private boolean feederButton = false;
     
     public void robotDisable() {
     }
@@ -46,6 +51,7 @@ public class JoystickControl implements IRobotComponent {
         arcadeThrottleValue = 0.0;
         arcadeTurnValue = 0.0;
         shooterValue = 0.0;
+        feederButton = false;
     }
 
     public void act() {
@@ -54,8 +60,16 @@ public class JoystickControl implements IRobotComponent {
         arcadeThrottleValue = ARCADE_THROTTLE_JOYSTICK.getRawAxis(ARCADE_THROTTLE_JOYSTICK_AXIS);
         arcadeTurnValue = ARCADE_TURN_JOYSTICK.getRawAxis(ARCADE_TURN_JOYSTICK_AXIS);
         
-        //TODO: STUB
-        shooterValue = 0.0;
+        if(operatorJoystick.getRawButton(SHOOTER_UP_BUTTON) && shooterValue > 0)
+        {
+            shooterValue -= 0.01;
+        }
+        else if(operatorJoystick.getRawButton(SHOOTER_DOWN_BUTTON) && shooterValue < 1)
+        {
+            shooterValue += 0.01;
+        }
+        
+        feederButton = operatorJoystick.getRawButton(SHOOTER_FEED_BUTTON);
     }
     
     public static class ControlMode{
@@ -107,5 +121,15 @@ public class JoystickControl implements IRobotComponent {
     public double[] getArcadeValues()
     {
         return new double[]{ arcadeThrottleValue, arcadeTurnValue };
+    }
+    
+    public double getShooterSpeed()
+    {
+        return shooterValue;
+    }
+    
+    public boolean getFeederButton()
+    {
+        return feederButton;
     }
 }

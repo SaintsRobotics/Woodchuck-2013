@@ -35,7 +35,7 @@ public class Robot extends IterativeRobot {
         controlSystem = new JoystickControl();
         vision = new Vision(networkTable);
         drive = new Drive(controlSystem);
-        shooter = new Shooter(vision);
+        shooter = new Shooter(vision, controlSystem);
         
         components = new IRobotComponent[]{ controlSystem, vision, drive, shooter };
     }

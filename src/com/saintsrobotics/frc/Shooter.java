@@ -21,6 +21,7 @@ public class Shooter implements IRobotComponent {
     private DigitalInput feederSwitch;
     
     private Vision vision;
+    private JoystickControl controller;
     
     private final int ENCODER_DIGITAL_SIDECAR_SLOT = 1;
     private final int ENCODER_DIGITAL_CHANNEL = 2;
@@ -33,8 +34,12 @@ public class Shooter implements IRobotComponent {
     
     private Jaguar shooterMotor;
     
-    public Shooter(Vision vision) {
+    private boolean lastSwitched;
+    
+    public Shooter(Vision vision, JoystickControl controller) {
         this.vision = vision;
+        this.controller = controller;
+        
         feeder = new Relay(FEEDER_RELAY_CHANNEL);
         feederSwitch = new DigitalInput(FEEDER_DIGITAL_SIDECAR_SLOT, FEEDER_DIGITAL_CHANNEL);
         
@@ -53,9 +58,21 @@ public class Shooter implements IRobotComponent {
     public void robotEnable() {
         shooterEncoder.reset();
         shooterEncoder.start();
+        lastSwitched = feederSwitch.get();
     }
 
     public void act() {
+        shooterMotor.set(controller.getShooterSpeed());
         
+        if(feederSwitch.get() && !lastSwitched)
+        {
+            feeder.set(Relay.Value.kOff);
+        }
+        else if(controller.getFeederButton())
+        {
+            feeder.set(Relay.Value.kOn);
+        }
+        
+        lastSwitched = feederSwitch.get();
     }
 }
