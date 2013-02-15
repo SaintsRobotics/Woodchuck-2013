@@ -1,6 +1,7 @@
 package com.saintsrobotics.frc;
 
 import edu.wpi.first.wpilibj.CANJaguar;
+import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 /**
  * The drive system for the robot.
@@ -173,8 +174,30 @@ public class Drive implements IRobotComponent {
     }
 
     public void robotDisable() {
+        try
+        {
+            frontLeftMotor.motor.disableControl();
+            frontRightMotor.motor.disableControl();
+            backLeftMotor.motor.disableControl();
+            backRightMotor.motor.disableControl();
+        }
+        catch (CANTimeoutException e)
+        {
+            Logger.log(e);
+        }
     }
 
     public void robotEnable() {
+        try
+        {
+            frontLeftMotor.motor.enableControl();
+            frontRightMotor.motor.enableControl();
+            backLeftMotor.motor.enableControl();
+            backRightMotor.motor.enableControl();
+        }
+        catch (CANTimeoutException e)
+        {
+            Logger.log(e);
+        }
     }
 }

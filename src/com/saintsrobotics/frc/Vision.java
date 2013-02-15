@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 public class Vision implements IRobotComponent {
     private NetworkTable table;
     
+    private double distance;
+    private double angle;
+    
     public Vision(NetworkTable table) {
         this.table = table;
     }
@@ -49,11 +52,15 @@ public class Vision implements IRobotComponent {
     }
 
     public void robotDisable() {
+        
     }
 
     public void robotEnable() {
+        
     }
 
     public void act() {
+        distance = getDistance();
+        angle = getAngle();
     }
 }
