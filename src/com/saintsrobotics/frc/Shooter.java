@@ -3,6 +3,7 @@ package com.saintsrobotics.frc;
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Relay;
@@ -34,11 +35,15 @@ public class Shooter implements IRobotComponent {
     
     private Jaguar shooterMotor;
     
+    private MovingAverage averageSpeed;
+    
     private boolean lastSwitched;
     
     public Shooter(Vision vision, JoystickControl controller) {
         this.vision = vision;
         this.controller = controller;
+        
+        averageSpeed = new MovingAverage(10);
         
         feeder = new Relay(FEEDER_RELAY_CHANNEL);
         feederSwitch = new DigitalInput(FEEDER_DIGITAL_SIDECAR_SLOT, FEEDER_DIGITAL_CHANNEL);
@@ -64,6 +69,8 @@ public class Shooter implements IRobotComponent {
     public void act() {
         shooterMotor.set(controller.getShooterSpeed());
         
+        averageSpeed.add(shooterEncoder.getRate() * 60);
+        
         if(feederSwitch.get() && !lastSwitched)
         {
             feeder.set(Relay.Value.kOff);
@@ -74,5 +81,13 @@ public class Shooter implements IRobotComponent {
         }
         
         lastSwitched = feederSwitch.get();
+        
+        report();
+    }
+    
+    private void report()
+    {
+        DriverStationComm.printMessage(DriverStationLCD.Line.kUser1, 0, "Shooter Speed: " + Double.valueOf(averageSpeed.getAverage()).toString());
+        DriverStationComm.printMessage(DriverStationLCD.Line.kUser2, 0, "Shooter Power: " + Double.valueOf(controller.getShooterSpeed()).toString());
     }
 }

@@ -1,6 +1,10 @@
 package com.saintsrobotics.frc;
 
 import edu.wpi.first.wpilibj.CANJaguar;
+import edu.wpi.first.wpilibj.CounterBase;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 /**
@@ -24,6 +28,12 @@ public class Drive implements IRobotComponent {
     private static final CANJaguar.NeutralMode CANJAGUAR_NEUTRAL_MODE =
             CANJaguar.NeutralMode.kBrake;
     
+    private static final int ENCODER_LEFT_CHANNEL = 1;
+    private static final int ENCODER_RIGHT_CHANNEL = 2;
+    
+    private static final double ENCODER_CODES_PER_REV = 10;
+    private static final double ENCODER_GEARING_RATIO = 10;
+    
     private JoystickControl controller;
     
     // Instance variables
@@ -31,6 +41,11 @@ public class Drive implements IRobotComponent {
     private Motor frontRightMotor;
     private Motor backLeftMotor;
     private Motor backRightMotor;
+    
+    private Encoder leftEncoder;
+    private DigitalInput leftEncoderInput;
+    private Encoder rightEncoder;
+    private DigitalInput rightEncoderInput;
     
     public Drive(JoystickControl controller) {
         frontLeftMotor = new Motor(CANJAGUAR_FRONT_LEFT_ID,
@@ -41,6 +56,12 @@ public class Drive implements IRobotComponent {
                 CANJAGUAR_BACK_LEFT_INVERTED);
         backRightMotor = new Motor(CANJAGUAR_BACK_RIGHT_ID,
                 CANJAGUAR_BACK_RIGHT_INVERTED);
+        
+        leftEncoderInput = new DigitalInput(ENCODER_LEFT_CHANNEL);
+        rightEncoderInput = new DigitalInput(ENCODER_RIGHT_CHANNEL);
+        
+        leftEncoder = new Encoder(leftEncoderInput, leftEncoderInput, false, EncodingType.k1X);
+        rightEncoder = new Encoder(rightEncoderInput, rightEncoderInput, false, EncodingType.k1X);
         
         this.controller = controller;
         
@@ -174,6 +195,9 @@ public class Drive implements IRobotComponent {
     }
 
     public void robotDisable() {
+        leftEncoder.stop();
+        rightEncoder.stop();
+        
         try
         {
             frontLeftMotor.motor.disableControl();
@@ -188,6 +212,12 @@ public class Drive implements IRobotComponent {
     }
 
     public void robotEnable() {
+        leftEncoder.reset();
+        leftEncoder.start();
+        
+        rightEncoder.reset();
+        rightEncoder.start();
+        
         try
         {
             frontLeftMotor.motor.enableControl();
