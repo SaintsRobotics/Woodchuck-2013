@@ -18,14 +18,20 @@ public class MovingAverage {
     public MovingAverage(int size) {
         this.size = size;
         samples = new double[size];
-        for (int i = 0; i < size; i++) samples[i] = 0d;
+        for (int i = 0; i < size; i++)
+        {
+            samples[i] = 0d;
+        }
     }
 
     public void add(double x) {
         total -= samples[index];
         samples[index] = x;
         total += x;
-        if (++index == size) index = 0; // cheaper than modulus
+        if (++index == size)
+        {
+            index = 0;
+        }
     }
 
     public double getAverage() {
