@@ -24,7 +24,7 @@ public class Vision implements IRobotComponent {
         double distance = 0;
         
         try {
-            distance = table.getNumber("Distance");
+            //distance = table.getNumber("Distance");
         }
         catch (Exception e) {
             Logger.log(e);
@@ -42,7 +42,7 @@ public class Vision implements IRobotComponent {
         double angle = 0;
         
         try {
-            angle = table.getNumber("Angle");
+            //angle = table.getNumber("Angle");
         }
         catch (Exception e) {
             Logger.log(e);

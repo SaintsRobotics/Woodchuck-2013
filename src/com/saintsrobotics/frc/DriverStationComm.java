@@ -66,6 +66,13 @@ public class DriverStationComm {
      * @return 
      */
     private static String shortenMessage(String message) {
-        return message.substring(0, DriverStationLCD.kLineLength);
+        if(message.length() > DriverStationLCD.kLineLength)
+        {
+            return message.substring(0, DriverStationLCD.kLineLength);
+        }
+        else
+        {
+            return message;
+        }
     }
 }

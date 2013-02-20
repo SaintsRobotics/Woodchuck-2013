@@ -13,10 +13,11 @@ import edu.wpi.first.wpilibj.can.CANTimeoutException;
  */
 public class Drive implements IRobotComponent {
     // Constants
+    /*
     private static final int JAGUAR_FRONT_LEFT_ID = 1;
-    private static final int JAGUAR_FRONT_RIGHT_ID = 2;
-    private static final int JAGUAR_BACK_LEFT_ID = 3;
-    private static final int JAGUAR_BACK_RIGHT_ID = 4;
+    private static final int JAGUAR_FRONT_RIGHT_ID = 1;
+    private static final int JAGUAR_BACK_LEFT_ID = 2;
+    private static final int JAGUAR_BACK_RIGHT_ID = 2;
     
     private static final boolean JAGUAR_FRONT_LEFT_INVERTED = false;
     private static final boolean JAGUAR_FRONT_RIGHT_INVERTED = false;
@@ -27,9 +28,17 @@ public class Drive implements IRobotComponent {
             CANJaguar.ControlMode.kPercentVbus;
     private static final CANJaguar.NeutralMode CANJAGUAR_NEUTRAL_MODE =
             CANJaguar.NeutralMode.kBrake;
+    */
     
-    private static final int ENCODER_LEFT_CHANNEL = 1;
-    private static final int ENCODER_RIGHT_CHANNEL = 2;
+    private static final int JAGUAR_LEFT_ID = 1;
+    private static final int JAGUAR_RIGHT_ID = 2;
+    
+    private static final boolean JAGUAR_LEFT_INVERTED = true;
+    private static final boolean JAGUAR_RIGHT_INVERTED = false;
+    
+    private static final int ENCODER_DIGITAL_SIDECAR_CHANNEL = 1;
+    private static final int ENCODER_LEFT_CHANNEL = 3;
+    private static final int ENCODER_RIGHT_CHANNEL = 4;
     
     private static final double ENCODER_CODES_PER_REV = 10;
     private static final double ENCODER_GEARING_RATIO = 10;
@@ -37,10 +46,15 @@ public class Drive implements IRobotComponent {
     private JoystickControl controller;
     
     // Instance variables
+    /*
     private Motor frontLeftMotor;
     private Motor frontRightMotor;
     private Motor backLeftMotor;
     private Motor backRightMotor;
+    */
+    
+    private Motor leftMotor;
+    private Motor rightMotor;
     
     private Encoder leftEncoder;
     private DigitalInput leftEncoderInput;
@@ -48,6 +62,7 @@ public class Drive implements IRobotComponent {
     private DigitalInput rightEncoderInput;
     
     public Drive(JoystickControl controller) {
+        /*
         frontLeftMotor = new Motor(JAGUAR_FRONT_LEFT_ID,
                 JAGUAR_FRONT_LEFT_INVERTED);
         frontRightMotor = new Motor(JAGUAR_FRONT_RIGHT_ID,
@@ -56,9 +71,13 @@ public class Drive implements IRobotComponent {
                 JAGUAR_BACK_LEFT_INVERTED);
         backRightMotor = new Motor(JAGUAR_BACK_RIGHT_ID,
                 JAGUAR_BACK_RIGHT_INVERTED);
+        */
         
-        leftEncoderInput = new DigitalInput(ENCODER_LEFT_CHANNEL);
-        rightEncoderInput = new DigitalInput(ENCODER_RIGHT_CHANNEL);
+        leftMotor = new Motor(JAGUAR_LEFT_ID, JAGUAR_LEFT_INVERTED);
+        rightMotor = new Motor(JAGUAR_RIGHT_ID, JAGUAR_RIGHT_INVERTED);
+        
+        leftEncoderInput = new DigitalInput(ENCODER_DIGITAL_SIDECAR_CHANNEL, ENCODER_LEFT_CHANNEL);
+        rightEncoderInput = new DigitalInput(ENCODER_DIGITAL_SIDECAR_CHANNEL, ENCODER_RIGHT_CHANNEL);
         
         leftEncoder = new Encoder(leftEncoderInput, leftEncoderInput, false, EncodingType.k1X);
         rightEncoder = new Encoder(rightEncoderInput, rightEncoderInput, false, EncodingType.k1X);
@@ -92,11 +111,11 @@ public class Drive implements IRobotComponent {
     {
         if(controller.getControlMode().value == JoystickControl.ControlMode.arcadeDrive.value)
         {
-            tankDrive(controller.getArcadeValues());
+            arcadeDrive(controller.getArcadeValues());
         }
         else
         {
-            arcadeDrive(controller.getTankValues());
+            tankDrive(controller.getTankValues());
         }
         
         
@@ -114,10 +133,15 @@ public class Drive implements IRobotComponent {
         rightValue = limit(rightValue);
         
         try {
+            /*
             frontLeftMotor.motor.set(frontLeftMotor.invert() * leftValue);
             frontRightMotor.motor.set(frontRightMotor.invert() * rightValue);
             backLeftMotor.motor.set(backLeftMotor.invert() * leftValue);
             backRightMotor.motor.set(backRightMotor.invert() * rightValue);
+            */
+            
+            leftMotor.motor.set(leftMotor.invert() * leftValue);
+            rightMotor.motor.set(rightMotor.invert() * rightValue);
         }
         catch (Exception exception) {
             Logger.log(exception);
@@ -138,10 +162,15 @@ public class Drive implements IRobotComponent {
         
         try
         {
+            /*
             frontLeftMotor.motor.set(frontLeftMotor.invert() * motorValues[0]);
             frontRightMotor.motor.set(frontRightMotor.invert() * motorValues[1]);
             backLeftMotor.motor.set(backLeftMotor.invert() * motorValues[0]);
             backRightMotor.motor.set(backRightMotor.invert() * motorValues[1]);
+            */
+            
+            leftMotor.motor.set(leftMotor.invert() * motorValues[0]);
+            rightMotor.motor.set(rightMotor.invert() * motorValues[1]);
         }
         catch (Exception e)
         {
@@ -151,10 +180,15 @@ public class Drive implements IRobotComponent {
     
     public void stopDrive() {
         try {
+            /*
             frontLeftMotor.motor.set(0);
             frontRightMotor.motor.set(0);
             backLeftMotor.motor.set(0);
             backRightMotor.motor.set(0);
+            */
+            
+            leftMotor.motor.set(0);
+            rightMotor.motor.set(0);
         }
         catch (Exception exception) {
             Logger.log(exception);
@@ -202,10 +236,15 @@ public class Drive implements IRobotComponent {
         leftEncoder.stop();
         rightEncoder.stop();
         
+        /*
         frontLeftMotor.motor.disable();
         frontRightMotor.motor.disable();
         backLeftMotor.motor.disable();
         backRightMotor.motor.disable();
+        */
+        
+        leftMotor.motor.disable();
+        rightMotor.motor.disable();
         
         /*
         try

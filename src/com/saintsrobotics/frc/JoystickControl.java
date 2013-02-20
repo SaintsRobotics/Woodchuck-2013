@@ -109,11 +109,11 @@ public class JoystickControl implements IRobotComponent {
     {
         if(controlMode.value == ControlMode.arcadeDrive.value)
         {
-            DriverStationComm.printMessage(DriverStationLCD.Line.kUser1, 0, "Control mode: Arcade");
+            DriverStationComm.printMessage(DriverStationLCD.Line.kUser1, 1, "Control mode: Arcade");
         }
         else    
         {
-            DriverStationComm.printMessage(DriverStationLCD.Line.kUser1, 0, "Control mode: Tank");
+            DriverStationComm.printMessage(DriverStationLCD.Line.kUser1, 1, "Control mode: Tank");
         }
         
         return controlMode;

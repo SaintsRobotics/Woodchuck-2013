@@ -32,9 +32,10 @@ public class Shooter implements IRobotComponent {
     private DigitalInput encoderInput;
     private Encoder shooterEncoder;
     
-    private final int SHOOTER_JAGUAR_CHANNEL = 10;
+    private static final int SHOOTER_JAGUAR_CHANNEL = 10;
+    private static final boolean SHOOTER_JAGUAR_INVERTED = false;
     
-    private Jaguar shooterMotor;
+    private Motor shooterMotor;
     
     private MovingAverage averageSpeed;
     
@@ -53,12 +54,12 @@ public class Shooter implements IRobotComponent {
         shooterEncoder = new Encoder(encoderInput, encoderInput, false, EncodingType.k1X);
         shooterEncoder.setDistancePerPulse(ENCODER_PULSE_DISTANCE);
         
-        shooterMotor = new Jaguar(SHOOTER_JAGUAR_CHANNEL);
+        shooterMotor = new Motor(SHOOTER_JAGUAR_CHANNEL, SHOOTER_JAGUAR_INVERTED);
     }
 
     public void robotDisable() {
         shooterEncoder.stop();
-        shooterMotor.disable();
+        shooterMotor.motor.disable();
     }
 
     public void robotEnable() {
@@ -68,7 +69,7 @@ public class Shooter implements IRobotComponent {
     }
 
     public void act() {
-        shooterMotor.set(controller.getShooterSpeed());
+        shooterMotor.motor.set(controller.getShooterSpeed());
         
         averageSpeed.add(shooterEncoder.getRate() * 60);
         
@@ -88,7 +89,7 @@ public class Shooter implements IRobotComponent {
     
     private void report()
     {
-        DriverStationComm.printMessage(DriverStationLCD.Line.kUser2, 0, "Shooter Speed: " + Double.valueOf(averageSpeed.getAverage()).toString());
-        DriverStationComm.printMessage(DriverStationLCD.Line.kUser3, 0, "Shooter Power: " + Double.valueOf(controller.getShooterSpeed()).toString());
+        DriverStationComm.printMessage(DriverStationLCD.Line.kUser2, 1, "Shooter Speed: " + Double.valueOf(averageSpeed.getAverage()).toString());
+        DriverStationComm.printMessage(DriverStationLCD.Line.kUser3, 1, "Shooter Power: " + Double.valueOf(controller.getShooterSpeed()).toString());
     }
 }

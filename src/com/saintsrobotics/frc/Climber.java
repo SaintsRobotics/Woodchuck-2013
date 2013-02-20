@@ -15,26 +15,27 @@ public class Climber implements IRobotComponent{
     private JoystickControl controller;
     
     private static final int CLIMBER_JAGUAR_CHANNEL = 4;
+    private static final boolean CLIMBER_JAGUAR_INVERTED = false;
     
-    private Jaguar climberMotor;
+    private Motor climberMotor;
     
     public Climber(JoystickControl controller)
     {
         this.controller = controller;
         
-        climberMotor = new Jaguar(CLIMBER_JAGUAR_CHANNEL);
+        climberMotor = new Motor(CLIMBER_JAGUAR_CHANNEL, CLIMBER_JAGUAR_INVERTED);
     }
     
     public void robotDisable() {
-        climberMotor.disable();
+        climberMotor.motor.disable();
     }
 
     public void robotEnable() {
-        climberMotor.set(0.0);
+        climberMotor.motor.set(0.0);
     }
 
     public void act() {
-        climberMotor.set(controller.getClimberValue());
+        climberMotor.motor.set(controller.getClimberValue());
     }
     
 }

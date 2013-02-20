@@ -31,7 +31,7 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-        networkTable = NetworkTable.getTable("camera");
+        //networkTable = NetworkTable.getTable("camera");
         controlSystem = new JoystickControl();
         vision = new Vision(networkTable);
         drive = new Drive(controlSystem);
