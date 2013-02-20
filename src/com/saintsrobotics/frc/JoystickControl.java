@@ -33,6 +33,8 @@ public class JoystickControl implements IRobotComponent {
     private static final int SHOOTER_DOWN_BUTTON = 6;
     private static final int SHOOTER_FEED_BUTTON = 8;
     
+    private static final int CLIMBER_JOYSTICK_AXIS = 2;
+    
     private ControlMode controlMode;
 
     private double tankLeftValue = 0.0;
@@ -40,6 +42,7 @@ public class JoystickControl implements IRobotComponent {
     private double arcadeThrottleValue = 0.0;
     private double arcadeTurnValue = 0.0;
     private double shooterValue = 0.0;
+    private double climberValue = 0.0;
     private boolean feederButton = false;
     
     public void robotDisable() {
@@ -51,6 +54,7 @@ public class JoystickControl implements IRobotComponent {
         arcadeThrottleValue = 0.0;
         arcadeTurnValue = 0.0;
         shooterValue = 0.0;
+        climberValue = 0.0;
         feederButton = false;
     }
 
@@ -70,6 +74,8 @@ public class JoystickControl implements IRobotComponent {
         }
         
         feederButton = operatorJoystick.getRawButton(SHOOTER_FEED_BUTTON);
+        
+        climberValue = operatorJoystick.getRawAxis(CLIMBER_JOYSTICK_AXIS);
     }
     
     public static class ControlMode{
@@ -131,5 +137,10 @@ public class JoystickControl implements IRobotComponent {
     public boolean getFeederButton()
     {
         return feederButton;
+    }
+    
+    public double getClimberValue()
+    {
+        return climberValue;
     }
 }

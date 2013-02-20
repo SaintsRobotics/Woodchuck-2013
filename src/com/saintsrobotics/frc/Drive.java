@@ -13,15 +13,15 @@ import edu.wpi.first.wpilibj.can.CANTimeoutException;
  */
 public class Drive implements IRobotComponent {
     // Constants
-    private static final int CANJAGUAR_FRONT_LEFT_ID = 1;
-    private static final int CANJAGUAR_FRONT_RIGHT_ID = 2;
-    private static final int CANJAGUAR_BACK_LEFT_ID = 3;
-    private static final int CANJAGUAR_BACK_RIGHT_ID = 4;
+    private static final int JAGUAR_FRONT_LEFT_ID = 1;
+    private static final int JAGUAR_FRONT_RIGHT_ID = 2;
+    private static final int JAGUAR_BACK_LEFT_ID = 3;
+    private static final int JAGUAR_BACK_RIGHT_ID = 4;
     
-    private static final boolean CANJAGUAR_FRONT_LEFT_INVERTED = false;
-    private static final boolean CANJAGUAR_FRONT_RIGHT_INVERTED = false;
-    private static final boolean CANJAGUAR_BACK_LEFT_INVERTED = false;
-    private static final boolean CANJAGUAR_BACK_RIGHT_INVERTED = false;
+    private static final boolean JAGUAR_FRONT_LEFT_INVERTED = false;
+    private static final boolean JAGUAR_FRONT_RIGHT_INVERTED = false;
+    private static final boolean JAGUAR_BACK_LEFT_INVERTED = false;
+    private static final boolean JAGUAR_BACK_RIGHT_INVERTED = false;
     
     private static final CANJaguar.ControlMode CANJAGUAR_CONTROL_MODE =
             CANJaguar.ControlMode.kPercentVbus;
@@ -48,14 +48,14 @@ public class Drive implements IRobotComponent {
     private DigitalInput rightEncoderInput;
     
     public Drive(JoystickControl controller) {
-        frontLeftMotor = new Motor(CANJAGUAR_FRONT_LEFT_ID,
-                CANJAGUAR_FRONT_LEFT_INVERTED);
-        frontRightMotor = new Motor(CANJAGUAR_FRONT_RIGHT_ID,
-                CANJAGUAR_FRONT_RIGHT_INVERTED);
-        backLeftMotor = new Motor(CANJAGUAR_BACK_LEFT_ID,
-                CANJAGUAR_BACK_LEFT_INVERTED);
-        backRightMotor = new Motor(CANJAGUAR_BACK_RIGHT_ID,
-                CANJAGUAR_BACK_RIGHT_INVERTED);
+        frontLeftMotor = new Motor(JAGUAR_FRONT_LEFT_ID,
+                JAGUAR_FRONT_LEFT_INVERTED);
+        frontRightMotor = new Motor(JAGUAR_FRONT_RIGHT_ID,
+                JAGUAR_FRONT_RIGHT_INVERTED);
+        backLeftMotor = new Motor(JAGUAR_BACK_LEFT_ID,
+                JAGUAR_BACK_LEFT_INVERTED);
+        backRightMotor = new Motor(JAGUAR_BACK_RIGHT_ID,
+                JAGUAR_BACK_RIGHT_INVERTED);
         
         leftEncoderInput = new DigitalInput(ENCODER_LEFT_CHANNEL);
         rightEncoderInput = new DigitalInput(ENCODER_RIGHT_CHANNEL);
@@ -65,9 +65,10 @@ public class Drive implements IRobotComponent {
         
         this.controller = controller;
         
-        init();
+        //init();
     }
     
+    /*
     private void init() {
         try {
             // Set all motors to have the same modes
@@ -85,6 +86,7 @@ public class Drive implements IRobotComponent {
             Logger.log(exception);
         }
     }
+    */
     
     public void act()
     {
@@ -96,6 +98,8 @@ public class Drive implements IRobotComponent {
         {
             arcadeDrive(controller.getTankValues());
         }
+        
+        
     }
     
     //Index 0: left side motor value
@@ -110,10 +114,10 @@ public class Drive implements IRobotComponent {
         rightValue = limit(rightValue);
         
         try {
-            frontLeftMotor.motor.setX(frontLeftMotor.invert() * leftValue);
-            frontRightMotor.motor.setX(frontRightMotor.invert() * rightValue);
-            backLeftMotor.motor.setX(backLeftMotor.invert() * leftValue);
-            backRightMotor.motor.setX(backRightMotor.invert() * rightValue);
+            frontLeftMotor.motor.set(frontLeftMotor.invert() * leftValue);
+            frontRightMotor.motor.set(frontRightMotor.invert() * rightValue);
+            backLeftMotor.motor.set(backLeftMotor.invert() * leftValue);
+            backRightMotor.motor.set(backRightMotor.invert() * rightValue);
         }
         catch (Exception exception) {
             Logger.log(exception);
@@ -134,10 +138,10 @@ public class Drive implements IRobotComponent {
         
         try
         {
-            frontLeftMotor.motor.setX(frontLeftMotor.invert() * motorValues[0]);
-            frontRightMotor.motor.setX(frontRightMotor.invert() * motorValues[1]);
-            backLeftMotor.motor.setX(backLeftMotor.invert() * motorValues[0]);
-            backRightMotor.motor.setX(backRightMotor.invert() * motorValues[1]);
+            frontLeftMotor.motor.set(frontLeftMotor.invert() * motorValues[0]);
+            frontRightMotor.motor.set(frontRightMotor.invert() * motorValues[1]);
+            backLeftMotor.motor.set(backLeftMotor.invert() * motorValues[0]);
+            backRightMotor.motor.set(backRightMotor.invert() * motorValues[1]);
         }
         catch (Exception e)
         {
@@ -147,10 +151,10 @@ public class Drive implements IRobotComponent {
     
     public void stopDrive() {
         try {
-            frontLeftMotor.motor.setX(0);
-            frontRightMotor.motor.setX(0);
-            backLeftMotor.motor.setX(0);
-            backRightMotor.motor.setX(0);
+            frontLeftMotor.motor.set(0);
+            frontRightMotor.motor.set(0);
+            backLeftMotor.motor.set(0);
+            backRightMotor.motor.set(0);
         }
         catch (Exception exception) {
             Logger.log(exception);
@@ -198,6 +202,12 @@ public class Drive implements IRobotComponent {
         leftEncoder.stop();
         rightEncoder.stop();
         
+        frontLeftMotor.motor.disable();
+        frontRightMotor.motor.disable();
+        backLeftMotor.motor.disable();
+        backRightMotor.motor.disable();
+        
+        /*
         try
         {
             frontLeftMotor.motor.disableControl();
@@ -209,6 +219,7 @@ public class Drive implements IRobotComponent {
         {
             Logger.log(e);
         }
+        */
     }
 
     public void robotEnable() {
@@ -218,6 +229,7 @@ public class Drive implements IRobotComponent {
         rightEncoder.reset();
         rightEncoder.start();
         
+        /*
         try
         {
             frontLeftMotor.motor.enableControl();
@@ -229,5 +241,6 @@ public class Drive implements IRobotComponent {
         {
             Logger.log(e);
         }
+        */
     }
 }

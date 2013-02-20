@@ -27,6 +27,7 @@ public class Shooter implements IRobotComponent {
     private final int ENCODER_DIGITAL_SIDECAR_SLOT = 1;
     private final int ENCODER_DIGITAL_CHANNEL = 2;
     private final double ENCODER_PULSE_DISTANCE = 1.0/3;
+    private final int ENCODER_AVERAGE_SAMPLES = 25;
     
     private DigitalInput encoderInput;
     private Encoder shooterEncoder;
@@ -43,7 +44,7 @@ public class Shooter implements IRobotComponent {
         this.vision = vision;
         this.controller = controller;
         
-        averageSpeed = new MovingAverage(10);
+        averageSpeed = new MovingAverage(ENCODER_AVERAGE_SAMPLES);
         
         feeder = new Relay(FEEDER_RELAY_CHANNEL);
         feederSwitch = new DigitalInput(FEEDER_DIGITAL_SIDECAR_SLOT, FEEDER_DIGITAL_CHANNEL);
@@ -87,7 +88,7 @@ public class Shooter implements IRobotComponent {
     
     private void report()
     {
-        DriverStationComm.printMessage(DriverStationLCD.Line.kUser1, 0, "Shooter Speed: " + Double.valueOf(averageSpeed.getAverage()).toString());
-        DriverStationComm.printMessage(DriverStationLCD.Line.kUser2, 0, "Shooter Power: " + Double.valueOf(controller.getShooterSpeed()).toString());
+        DriverStationComm.printMessage(DriverStationLCD.Line.kUser2, 0, "Shooter Speed: " + Double.valueOf(averageSpeed.getAverage()).toString());
+        DriverStationComm.printMessage(DriverStationLCD.Line.kUser3, 0, "Shooter Power: " + Double.valueOf(controller.getShooterSpeed()).toString());
     }
 }

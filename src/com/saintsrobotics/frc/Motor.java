@@ -1,20 +1,20 @@
 package com.saintsrobotics.frc;
 
-import edu.wpi.first.wpilibj.CANJaguar;
+import edu.wpi.first.wpilibj.Jaguar;
 
 /**
  * An abstraction over using motors.
  * @author Saints Robotics
  */
 public class Motor {
-    public final CANJaguar motor;
+    public final Jaguar motor;
     private boolean isInverted;
     
     public Motor(int motorID, boolean isInverted) {
-        CANJaguar newMotor = null;
+        Jaguar newMotor = null;
         
         try {
-            newMotor = new CANJaguar(motorID);
+            newMotor = new Jaguar(motorID);
         }
         catch (Exception exception) {
             Logger.log(exception);
