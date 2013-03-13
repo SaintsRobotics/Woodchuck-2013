@@ -113,12 +113,16 @@ public class Drive implements IRobotComponent {
         {
             arcadeDrive(controller.getArcadeValues());
         }
-        else
+        else if(controller.getControlMode().value == JoystickControl.ControlMode.tankDrive.value)
         {
             tankDrive(controller.getTankValues());
         }
         
-        
+        else
+        {
+            arcadeDrive(controller.getArcade1Values());
+        }
+                
     }
     
     //Index 0: left side motor value
@@ -159,6 +163,8 @@ public class Drive implements IRobotComponent {
         double leftValue = moveValue + rotateValue;
         double rightValue = moveValue - rotateValue;
         double[] motorValues = scale( new double[]{ leftValue, rightValue } );
+        
+        System.out.println(leftValue + " : " + rightValue + " :: " + motorValues);
         
         try
         {
