@@ -160,8 +160,8 @@ public class Drive implements IRobotComponent {
     }
     
     public void arcadeDrive(double moveValue, double rotateValue) {
-        double leftValue = moveValue + rotateValue;
-        double rightValue = moveValue - rotateValue;
+        double leftValue = moveValue - rotateValue;
+        double rightValue = moveValue + rotateValue;
         double[] motorValues = scale( new double[]{ leftValue, rightValue } );
         
         System.out.println(leftValue + " : " + rightValue + " :: " + motorValues);

@@ -16,7 +16,7 @@ public class Shooter implements IRobotComponent {
     
     private final int FEEDER_RELAY_CHANNEL = 1;
     private final int FEEDER_DIGITAL_SIDECAR_SLOT = 1;
-    private final int FEEDER_DIGITAL_CHANNEL = 2;
+    private final int FEEDER_DIGITAL_CHANNEL = 1;
     
     private Relay feeder;
     private DigitalInput feederSwitch;
@@ -25,7 +25,7 @@ public class Shooter implements IRobotComponent {
     private JoystickControl controller;
     
     private final int ENCODER_DIGITAL_SIDECAR_SLOT = 1;
-    private final int ENCODER_DIGITAL_CHANNEL = 1;
+    private final int ENCODER_DIGITAL_CHANNEL = 2;
     private final double ENCODER_PULSE_DISTANCE = 1.0/3;
     private final int ENCODER_AVERAGE_SAMPLES = 25;
     
@@ -72,6 +72,17 @@ public class Shooter implements IRobotComponent {
     public void act() {
         shooterMotor.motor.set(controller.getShooterSpeed());
         
+        /*
+        if(controller.getShooterSpeed() * 5000 > averageSpeed.getAverage())
+        {
+            shooterMotor.motor.set(0);
+        }
+        else
+        {
+            shooterMotor.motor.set(1);
+        }
+        */
+        
         averageSpeed.add(shooterEncoder.getRate() * 60);
         System.out.println(shooterEncoder.getRate()* 60);
         if(feederSwitch.get() && !lastSwitched)
@@ -91,6 +102,6 @@ public class Shooter implements IRobotComponent {
     private void report()
     {
         DriverStationComm.printMessage(DriverStationLCD.Line.kUser2, 1, "Shooter Speed: " + Double.valueOf(averageSpeed.getAverage()).toString());
-        DriverStationComm.printMessage(DriverStationLCD.Line.kUser3, 1, "Shooter Power: " + Double.valueOf(controller.getShooterSpeed()).toString());
+        DriverStationComm.printMessage(DriverStationLCD.Line.kUser3, 1, "Shooter Pwr Spd: " + Double.valueOf(controller.getShooterSpeed() * 5000).toString());
     }
 }
