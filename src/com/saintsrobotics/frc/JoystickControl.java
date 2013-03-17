@@ -13,21 +13,25 @@ public class JoystickControl implements IRobotComponent {
     private static final int JOYSTICK_LEFT_DRIVE_PORT = 1;
     private static final int JOYSTICK_RIGHT_DRIVE_PORT = 2;
     private static final int JOYSTICK_OPERATOR_PORT = 3;
+    private static final int JOYSTICK_XBOX_DRIVE_PORT = 1;
     
     private Joystick leftDriveJoystick;
     private Joystick rightDriveJoystick;
     private Joystick operatorJoystick;
+    private Joystick xboxDriveJoystick;
     
     private int CONTROL_MODE;
     
-    private final Joystick TANK_LEFT_JOYSTICK;
-    private final Joystick TANK_RIGHT_JOYSTICK;
+    private final Joystick XBOX_DRIVE_JOYSTICK;
+    
+    //private final Joystick TANK_LEFT_JOYSTICK;
+    //private final Joystick TANK_RIGHT_JOYSTICK;
     
     private static final int TANK_LEFT_JOYSTICK_AXIS = 2;
     private static final int TANK_RIGHT_JOYSTICK_AXIS = 2;
     
-    private final Joystick ARCADE_THROTTLE_JOYSTICK;
-    private final Joystick ARCADE_TURN_JOYSTICK;
+    //private final Joystick ARCADE_THROTTLE_JOYSTICK;
+    //private final Joystick ARCADE_TURN_JOYSTICK;
     
     private static final int ARCADE_THROTTLE_JOYSTICK_AXIS = 2;
     private static final int ARCADE_TURN_JOYSTICK_AXIS = 1;
@@ -35,6 +39,8 @@ public class JoystickControl implements IRobotComponent {
     private static final int DRIVE_SLOW_BUTTON = 1;
     private static final double DRIVE_SLOW_VALUE = 0.33;
     
+    private static final int SHOOTER_SET_BUTTON = 1;
+    private static final int SHOOTER_SET_ZERO_BUTTON = 7;
     private static final int SHOOTER_UP_BUTTON = 5;
     private static final int SHOOTER_DOWN_BUTTON = 6;
     private static final int SHOOTER_FEED_BUTTON = 8;
@@ -67,14 +73,20 @@ public class JoystickControl implements IRobotComponent {
     }
 
     public void act() {
-        tankLeftValue = TANK_LEFT_JOYSTICK.getRawAxis(TANK_LEFT_JOYSTICK_AXIS);
-        tankRightValue = TANK_RIGHT_JOYSTICK.getRawAxis(TANK_RIGHT_JOYSTICK_AXIS);
-        arcadeThrottleValue = ARCADE_THROTTLE_JOYSTICK.getRawAxis(ARCADE_THROTTLE_JOYSTICK_AXIS);
-        arcadeTurnValue = ARCADE_TURN_JOYSTICK.getRawAxis(ARCADE_TURN_JOYSTICK_AXIS);
-        arcade1TurnValue= ARCADE_THROTTLE_JOYSTICK.getRawAxis(ARCADE_TURN_JOYSTICK_AXIS);
+        //tankLeftValue = TANK_LEFT_JOYSTICK.getRawAxis(TANK_LEFT_JOYSTICK_AXIS);
+        //tankRightValue = TANK_RIGHT_JOYSTICK.getRawAxis(TANK_RIGHT_JOYSTICK_AXIS);
+        //arcadeThrottleValue = ARCADE_THROTTLE_JOYSTICK.getRawAxis(ARCADE_THROTTLE_JOYSTICK_AXIS);
+        //arcadeTurnValue = ARCADE_TURN_JOYSTICK.getRawAxis(ARCADE_TURN_JOYSTICK_AXIS);
+        //arcade1TurnValue= ARCADE_THROTTLE_JOYSTICK.getRawAxis(ARCADE_TURN_JOYSTICK_AXIS);
         
-        slowButton = leftDriveJoystick.getRawButton(DRIVE_SLOW_BUTTON);
-        curveTurnValues();
+        tankLeftValue = XBOX_DRIVE_JOYSTICK.getRawAxis(TANK_LEFT_JOYSTICK_AXIS);
+        tankRightValue = XBOX_DRIVE_JOYSTICK.getRawAxis(TANK_RIGHT_JOYSTICK_AXIS);
+        arcadeThrottleValue = XBOX_DRIVE_JOYSTICK.getRawAxis(ARCADE_THROTTLE_JOYSTICK_AXIS);
+        arcadeTurnValue = XBOX_DRIVE_JOYSTICK.getRawAxis(ARCADE_TURN_JOYSTICK_AXIS);
+        arcade1TurnValue= XBOX_DRIVE_JOYSTICK.getRawAxis(ARCADE_TURN_JOYSTICK_AXIS);
+        
+        //slowButton = leftDriveJoystick.getRawButton(DRIVE_SLOW_BUTTON);
+        /*curveTurnValues();
         
         if(slowButton)
         {
@@ -99,15 +111,24 @@ public class JoystickControl implements IRobotComponent {
         if(leftDriveJoystick.getRawButton(5))
         {
             controlMode = ControlMode.arcadeDrive1;
+        }*/
+        
+        if(operatorJoystick.getRawButton(SHOOTER_SET_BUTTON))
+        {
+            shooterValue = 0.95;
+        }
+        else if(operatorJoystick.getRawButton(SHOOTER_SET_ZERO_BUTTON))
+        {
+            shooterValue = 0.0;
         }
         
         if(operatorJoystick.getRawButton(SHOOTER_UP_BUTTON) && shooterValue > 0)
         {
-            shooterValue -= 0.01;
+            shooterValue -= 0.005;
         }
         else if(operatorJoystick.getRawButton(SHOOTER_DOWN_BUTTON) && shooterValue < 1)
         {
-            shooterValue += 0.01;
+            shooterValue += 0.005;
         }
         
         feederButton = operatorJoystick.getRawButton(SHOOTER_FEED_BUTTON);
@@ -129,15 +150,18 @@ public class JoystickControl implements IRobotComponent {
     }
     
     public JoystickControl() {
-        leftDriveJoystick = new Joystick(JOYSTICK_LEFT_DRIVE_PORT);
-        rightDriveJoystick = new Joystick(JOYSTICK_RIGHT_DRIVE_PORT);
+        //leftDriveJoystick = new Joystick(JOYSTICK_LEFT_DRIVE_PORT);
+        //rightDriveJoystick = new Joystick(JOYSTICK_RIGHT_DRIVE_PORT);
         operatorJoystick = new Joystick(JOYSTICK_OPERATOR_PORT);
+        xboxDriveJoystick = new Joystick(JOYSTICK_XBOX_DRIVE_PORT);
         
-        TANK_LEFT_JOYSTICK = leftDriveJoystick;
-        TANK_RIGHT_JOYSTICK = rightDriveJoystick;
+        //TANK_LEFT_JOYSTICK = leftDriveJoystick;
+        //TANK_RIGHT_JOYSTICK = rightDriveJoystick;
         
-        ARCADE_THROTTLE_JOYSTICK = leftDriveJoystick;
-        ARCADE_TURN_JOYSTICK = rightDriveJoystick;
+        //ARCADE_THROTTLE_JOYSTICK = leftDriveJoystick;
+        //ARCADE_TURN_JOYSTICK = rightDriveJoystick;
+        
+        XBOX_DRIVE_JOYSTICK = xboxDriveJoystick;
         
         //Default driving mode
         controlMode = ControlMode.arcadeDrive;
