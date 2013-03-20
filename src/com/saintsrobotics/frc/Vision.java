@@ -63,4 +63,7 @@ public class Vision implements IRobotComponent {
         distance = getDistance();
         angle = getAngle();
     }
+
+    public void robotAuton() {
+    }
 }

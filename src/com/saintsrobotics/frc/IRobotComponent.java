@@ -11,5 +11,6 @@ package com.saintsrobotics.frc;
 public interface IRobotComponent {
     public void robotDisable();
     public void robotEnable();
+    public void robotAuton();
     public void act();
 }

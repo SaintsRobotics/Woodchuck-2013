@@ -37,5 +37,8 @@ public class Climber implements IRobotComponent{
     public void act() {
         climberMotor.motor.set(controller.getClimberValue());
     }
+
+    public void robotAuton() {
+    }
     
 }

@@ -160,6 +160,9 @@ public class JoystickControl implements IRobotComponent {
             arcade1TurnValue = 0;
         }
     }
+
+    public void robotAuton() {
+    }
     
     public static class ControlMode{
         public final int value;

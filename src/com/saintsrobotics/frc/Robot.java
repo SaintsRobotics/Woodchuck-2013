@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous.
      */
     public void autonomousPeriodic() {
-        
+        autonomousRoutine();
     }
     
     /**
@@ -130,6 +130,14 @@ public class Robot extends IterativeRobot {
         for(int i = 0; i < components.length; i++)
         {
             components[i].act();
+        }
+    }
+    
+    private void autonomousRoutine()
+    {
+        for(int i = 0; i < components.length; i++)
+        {
+            components[i].robotAuton();
         }
     }
 }

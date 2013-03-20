@@ -75,6 +75,7 @@ public class Shooter implements IRobotComponent {
     public void robotDisable() {
         shooterEncoder.stop();
         shooterMotor.motor.disable();
+        cycleCounts = 0;
     }
 
     public void robotEnable() {
@@ -127,5 +128,39 @@ public class Shooter implements IRobotComponent {
     {
         DriverStationComm.printMessage(DriverStationLCD.Line.kUser2, 1, "Shoot Spd: " + Double.valueOf(currentSpeed).toString());
         DriverStationComm.printMessage(DriverStationLCD.Line.kUser3, 1, "Shoot Pwr: " + Double.valueOf(controller.getShooterSpeed() * 5000).toString());
+    }
+
+    public void robotAuton() {
+        
+        shooterMotor.motor.set(0.95);
+        
+        if(cycleCounts == 100 || cycleCounts == 150 || cycleCounts == 200 || cycleCounts == 200)
+        {
+            lastSwitched = true;
+        }
+        else
+        {
+            lastSwitched = false;
+        }
+        
+        if(cycleCounts % 5 == 0)
+        {
+            currentSpeed = 10 * (shooterEncoder.get() - rateCount) / (Timer.getFPGATimestamp() - prevTime);
+            rateCount = shooterEncoder.get();
+            prevTime = Timer.getFPGATimestamp();            
+        }
+        
+        if(feederSwitch.get() && !lastSwitched)
+        {
+            feeder.set(Relay.Value.kOff);
+        }
+        else if(controller.getFeederButton() && currentSpeed > 4000)
+        {
+            feeder.set(Relay.Value.kOn);
+        }
+        
+        
+        cycleCounts++;
+        report();
     }
 }
