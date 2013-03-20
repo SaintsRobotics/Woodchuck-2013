@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 /**
@@ -61,6 +62,8 @@ public class Drive implements IRobotComponent {
     private Encoder rightEncoder;
     private DigitalInput rightEncoderInput;
     
+    private Servo raiseServo;
+    
     public Drive(JoystickControl controller) {
         /*
         frontLeftMotor = new Motor(JAGUAR_FRONT_LEFT_ID,
@@ -81,6 +84,8 @@ public class Drive implements IRobotComponent {
         
         leftEncoder = new Encoder(leftEncoderInput, leftEncoderInput, false, EncodingType.k1X);
         rightEncoder = new Encoder(rightEncoderInput, rightEncoderInput, false, EncodingType.k1X);
+        
+        raiseServo = new Servo(5);
         
         this.controller = controller;
         
@@ -117,10 +122,18 @@ public class Drive implements IRobotComponent {
         {
             tankDrive(controller.getTankValues());
         }
-        
         else
         {
             arcadeDrive(controller.getArcade1Values());
+        }
+        
+        if(controller.getRaiseButton())
+        {
+            raiseServo.setAngle(0);
+        }
+        else
+        {
+            raiseServo.setAngle(180);
         }
                 
     }

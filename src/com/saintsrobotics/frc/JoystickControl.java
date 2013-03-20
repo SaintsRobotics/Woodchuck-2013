@@ -10,13 +10,13 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class JoystickControl implements IRobotComponent {
     // USB ports for the joysticks
-    private static final int JOYSTICK_LEFT_DRIVE_PORT = 1;
-    private static final int JOYSTICK_RIGHT_DRIVE_PORT = 2;
-    private static final int JOYSTICK_OPERATOR_PORT = 3;
+    //private static final int JOYSTICK_LEFT_DRIVE_PORT = 1;
+    //private static final int JOYSTICK_RIGHT_DRIVE_PORT = 2;
+    private static final int JOYSTICK_OPERATOR_PORT = 2;
     private static final int JOYSTICK_XBOX_DRIVE_PORT = 1;
     
-    private Joystick leftDriveJoystick;
-    private Joystick rightDriveJoystick;
+    //private Joystick leftDriveJoystick;
+    //private Joystick rightDriveJoystick;
     private Joystick operatorJoystick;
     private Joystick xboxDriveJoystick;
     
@@ -28,15 +28,16 @@ public class JoystickControl implements IRobotComponent {
     //private final Joystick TANK_RIGHT_JOYSTICK;
     
     private static final int TANK_LEFT_JOYSTICK_AXIS = 2;
-    private static final int TANK_RIGHT_JOYSTICK_AXIS = 2;
+    private static final int TANK_RIGHT_JOYSTICK_AXIS = 5;
     
     //private final Joystick ARCADE_THROTTLE_JOYSTICK;
     //private final Joystick ARCADE_TURN_JOYSTICK;
     
     private static final int ARCADE_THROTTLE_JOYSTICK_AXIS = 2;
-    private static final int ARCADE_TURN_JOYSTICK_AXIS = 1;
+    private static final int ARCADE_TURN_JOYSTICK_AXIS = 4;
+    private static final int ARCADE_1_TURN_JOYSTICK_AXIS = 1;
     
-    private static final int DRIVE_SLOW_BUTTON = 1;
+    private static final int DRIVE_SLOW_BUTTON = 5;
     private static final double DRIVE_SLOW_VALUE = 0.33;
     
     private static final int SHOOTER_SET_BUTTON = 1;
@@ -46,6 +47,8 @@ public class JoystickControl implements IRobotComponent {
     private static final int SHOOTER_FEED_BUTTON = 8;
     
     private static final int CLIMBER_JOYSTICK_AXIS = 5;
+    
+    private static final int RAISE_BUTTON = 4;
     
     private ControlMode controlMode;
 
@@ -58,6 +61,7 @@ public class JoystickControl implements IRobotComponent {
     private double climberValue = 0.0;
     private boolean slowButton = false;
     private boolean feederButton = false;
+    private boolean raiseButton = false;
     
     public void robotDisable() {
     }
@@ -83,10 +87,11 @@ public class JoystickControl implements IRobotComponent {
         tankRightValue = XBOX_DRIVE_JOYSTICK.getRawAxis(TANK_RIGHT_JOYSTICK_AXIS);
         arcadeThrottleValue = XBOX_DRIVE_JOYSTICK.getRawAxis(ARCADE_THROTTLE_JOYSTICK_AXIS);
         arcadeTurnValue = XBOX_DRIVE_JOYSTICK.getRawAxis(ARCADE_TURN_JOYSTICK_AXIS);
-        arcade1TurnValue= XBOX_DRIVE_JOYSTICK.getRawAxis(ARCADE_TURN_JOYSTICK_AXIS);
+        arcade1TurnValue= XBOX_DRIVE_JOYSTICK.getRawAxis(ARCADE_1_TURN_JOYSTICK_AXIS);
         
-        //slowButton = leftDriveJoystick.getRawButton(DRIVE_SLOW_BUTTON);
-        /*curveTurnValues();
+        slowButton = XBOX_DRIVE_JOYSTICK.getRawButton(DRIVE_SLOW_BUTTON);
+        curveTurnValues();
+        deadZone();
         
         if(slowButton)
         {
@@ -98,20 +103,20 @@ public class JoystickControl implements IRobotComponent {
             DriverStationComm.printMessage(DriverStationLCD.Line.kUser1, 4, "Slow Mode: OFF");
         }
         
-        if(leftDriveJoystick.getRawButton(3))
+        if(XBOX_DRIVE_JOYSTICK.getRawButton(4))
         {
             controlMode = ControlMode.tankDrive;
         }
         
-        if(leftDriveJoystick.getRawButton(4))
+        if(XBOX_DRIVE_JOYSTICK.getRawButton(3))
         {
             controlMode = ControlMode.arcadeDrive;
         }
         
-        if(leftDriveJoystick.getRawButton(5))
+        if(XBOX_DRIVE_JOYSTICK.getRawButton(2))
         {
             controlMode = ControlMode.arcadeDrive1;
-        }*/
+        }
         
         if(operatorJoystick.getRawButton(SHOOTER_SET_BUTTON))
         {
@@ -133,7 +138,27 @@ public class JoystickControl implements IRobotComponent {
         
         feederButton = operatorJoystick.getRawButton(SHOOTER_FEED_BUTTON);
         
+        raiseButton = operatorJoystick.getRawButton(RAISE_BUTTON);
+        
         climberValue = operatorJoystick.getRawAxis(CLIMBER_JOYSTICK_AXIS);
+    }
+
+    private void deadZone() {        
+        if (Math.abs(tankLeftValue) < 0.13) {
+            tankLeftValue = 0;
+        }
+        if (Math.abs(tankRightValue) < 0.13) {
+            tankRightValue = 0;
+        }
+        if (Math.abs(arcadeThrottleValue) < 0.13) {
+            arcadeThrottleValue = 0;
+        }
+        if (Math.abs(arcadeTurnValue) < 0.13) {
+            arcadeTurnValue = 0;
+        }
+        if (Math.abs(arcade1TurnValue) < 0.13) {
+            arcade1TurnValue = 0;
+        }
     }
     
     public static class ControlMode{
@@ -226,6 +251,11 @@ public class JoystickControl implements IRobotComponent {
     public boolean getFeederButton()
     {
         return feederButton;
+    }
+    
+    public boolean getRaiseButton()
+    {
+        return raiseButton;
     }
     
     public double getClimberValue()
