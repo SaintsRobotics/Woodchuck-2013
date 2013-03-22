@@ -129,7 +129,7 @@ public class Drive implements IRobotComponent {
         
         if(controller.getRaiseButton())
         {
-            raiseServo.setAngle(75);
+            raiseServo.setAngle(135);
         }
         else
         {

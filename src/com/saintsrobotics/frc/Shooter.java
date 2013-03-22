@@ -75,6 +75,10 @@ public class Shooter implements IRobotComponent {
         lastSwitched = feederSwitch.get();
         SmartDashboard.putBoolean("Limit", lastSwitched);
     }
+    
+    public void robotAuton() {
+        
+    }
 
     public void act() {
         shooterMotor.motor.set(controller.getShooterSpeed());
