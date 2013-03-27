@@ -46,7 +46,7 @@ public class JoystickControl implements IRobotComponent {
     private static final int SHOOTER_DOWN_BUTTON = 6;
     private static final int SHOOTER_FEED_BUTTON = 8;
     
-    private static final int CLIMBER_JOYSTICK_AXIS = 5;
+    private static final int CLIMBER_JOYSTICK_AXIS = 3;
     
     private static final int RAISE_BUTTON = 4;
     

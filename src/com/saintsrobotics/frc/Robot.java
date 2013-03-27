@@ -23,6 +23,7 @@ public class Robot extends IterativeRobot {
     private NetworkTable networkTable;
     private Shooter shooter;
     private Vision vision;
+    private Climber climber;
     
     private IRobotComponent[] components;
     
@@ -36,8 +37,9 @@ public class Robot extends IterativeRobot {
         vision = new Vision(networkTable);
         drive = new Drive(controlSystem);
         shooter = new Shooter(vision, controlSystem);
+        climber = new Climber(controlSystem);
         
-        components = new IRobotComponent[]{ controlSystem, vision, drive, shooter };
+        components = new IRobotComponent[]{ controlSystem, vision, drive, shooter, climber };
     }
     
     /**

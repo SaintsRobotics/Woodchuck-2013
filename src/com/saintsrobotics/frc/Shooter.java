@@ -39,6 +39,7 @@ public class Shooter implements IRobotComponent {
     private double rateCount;
     private double prevTime;
     private double currentSpeed;
+    private boolean autoFeed;
 
     public Shooter(Vision vision, JoystickControl controller) {
         this.vision = vision;
@@ -67,6 +68,7 @@ public class Shooter implements IRobotComponent {
     public void robotDisable() {
         shooterEncoder.stop();
         shooterMotor.motor.disable();
+        cycleCounts = 0;
     }
 
     public void robotEnable() {
@@ -77,7 +79,43 @@ public class Shooter implements IRobotComponent {
     }
     
     public void robotAuton() {
+        shooterMotor.motor.set(0.95);
+
+        /*
+         * if(shooterEncoder.getRate() * 60 > controller.getShooterSpeed() *
+         * 5000) { shooterMotor.motor.set(0); } else {
+         * shooterMotor.motor.set(1); }
+         */
+
+        if (cycleCounts % 5 == 0) {
+            currentSpeed = 10 * (shooterEncoder.get() - rateCount) / (Timer.getFPGATimestamp() - prevTime);
+            rateCount = shooterEncoder.get();
+            prevTime = Timer.getFPGATimestamp();
+            //cycleCounts = 0;
+
+        }
         
+        if(cycleCounts == 100 || cycleCounts == 250 || cycleCounts == 400 || cycleCounts == 550)
+        {
+            autoFeed = true;
+        }
+        else if(cycleCounts == 120 || cycleCounts == 270 || cycleCounts == 420 || cycleCounts == 570)
+        {
+            autoFeed = false;
+        }
+        cycleCounts++;
+        //averageSpeed.add(shooterEncoder.getRate() * 60);
+        //System.out.println((shooterEncoder.getRate()* 60) + " : " + (controller.getShooterSpeed() * 5000));
+        
+        if (feederSwitch.get() && !lastSwitched) {
+            feeder.set(Relay.Value.kOff);
+        } else if (autoFeed && currentSpeed > 4000) {
+            feeder.set(Relay.Value.kOn);
+        }
+
+        lastSwitched = feederSwitch.get();
+        SmartDashboard.putBoolean("Limit", lastSwitched);
+        report();
     }
 
     public void act() {
