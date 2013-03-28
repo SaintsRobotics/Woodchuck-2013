@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The drive system for the robot.
@@ -135,7 +136,8 @@ public class Drive implements IRobotComponent {
         {
             raiseServo.setAngle(180);
         }
-                
+        
+        report();
     }
     
     //Index 0: left side motor value
@@ -303,5 +305,10 @@ public class Drive implements IRobotComponent {
     }
 
     public void robotAuton() {
+    }
+    
+    private void report() {
+        SmartDashboard.putNumber("Arcade Throttle", controller.getArcadeValues()[0]);
+        SmartDashboard.putNumber("Arcade Turn", controller.getArcadeValues()[1]);
     }
 }

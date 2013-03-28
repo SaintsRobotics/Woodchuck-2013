@@ -36,6 +36,7 @@ public class Shooter implements IRobotComponent {
     private MovingAverage averageSpeed;
     private boolean lastSwitched;
     private int cycleCounts;
+    private double lastShotCount;
     private double rateCount;
     private double prevTime;
     private double currentSpeed;
@@ -54,8 +55,6 @@ public class Shooter implements IRobotComponent {
         encoderInput = new DigitalInput(ENCODER_DIGITAL_SIDECAR_SLOT, ENCODER_DIGITAL_CHANNEL);
         shooterEncoder = new Counter(encoderInput);
         shooterEncoder.setSemiPeriodMode(true);
-        //shooterEncoder = new Encoder(encoderInput, encoderInput, false, EncodingType.k2X);
-        //shooterEncoder.setDistancePerPulse(ENCODER_PULSE_DISTANCE);
 
         shooterMotor = new Motor(SHOOTER_JAGUAR_CHANNEL, SHOOTER_JAGUAR_INVERTED);
 
@@ -69,6 +68,7 @@ public class Shooter implements IRobotComponent {
         shooterEncoder.stop();
         shooterMotor.motor.disable();
         cycleCounts = 0;
+        lastShotCount = 0;
     }
 
     public void robotEnable() {
@@ -80,41 +80,32 @@ public class Shooter implements IRobotComponent {
     
     public void robotAuton() {
         shooterMotor.motor.set(0.95);
-
-        /*
-         * if(shooterEncoder.getRate() * 60 > controller.getShooterSpeed() *
-         * 5000) { shooterMotor.motor.set(0); } else {
-         * shooterMotor.motor.set(1); }
-         */
-
+        
         if (cycleCounts % 5 == 0) {
             currentSpeed = 10 * (shooterEncoder.get() - rateCount) / (Timer.getFPGATimestamp() - prevTime);
             rateCount = shooterEncoder.get();
             prevTime = Timer.getFPGATimestamp();
-            //cycleCounts = 0;
-
         }
         
         if(cycleCounts == 100 || cycleCounts == 250 || cycleCounts == 400 || cycleCounts == 550)
         {
             autoFeed = true;
+            lastShotCount = Timer.getFPGATimestamp();
         }
         else if(cycleCounts == 120 || cycleCounts == 270 || cycleCounts == 420 || cycleCounts == 570)
         {
             autoFeed = false;
         }
+        
         cycleCounts++;
-        //averageSpeed.add(shooterEncoder.getRate() * 60);
-        //System.out.println((shooterEncoder.getRate()* 60) + " : " + (controller.getShooterSpeed() * 5000));
         
         if (feederSwitch.get() && !lastSwitched) {
             feeder.set(Relay.Value.kOff);
-        } else if (autoFeed && currentSpeed > 4000) {
+        } else if (autoFeed) {
             feeder.set(Relay.Value.kOn);
         }
 
         lastSwitched = feederSwitch.get();
-        SmartDashboard.putBoolean("Limit", lastSwitched);
         report();
     }
 
@@ -135,12 +126,12 @@ public class Shooter implements IRobotComponent {
 
         }
         cycleCounts++;
-        //averageSpeed.add(shooterEncoder.getRate() * 60);
-        //System.out.println((shooterEncoder.getRate()* 60) + " : " + (controller.getShooterSpeed() * 5000));
+        
         if (feederSwitch.get() && !lastSwitched) {
             feeder.set(Relay.Value.kOff);
         } else if (controller.getFeederButton() && currentSpeed > 4000) {
             feeder.set(Relay.Value.kOn);
+            lastShotCount = Timer.getFPGATimestamp();
         }
 
         lastSwitched = feederSwitch.get();
@@ -153,5 +144,7 @@ public class Shooter implements IRobotComponent {
         DriverStationComm.printMessage(DriverStationLCD.Line.kUser3, 1, "Shoot Pwr: " + Double.valueOf(controller.getShooterSpeed() * 5000).toString());
         SmartDashboard.putNumber("Shooter Speed", currentSpeed);
         SmartDashboard.putNumber("Shooter Power", controller.getShooterSpeed() * 5000);
+        SmartDashboard.putBoolean("Limit Switch", feederSwitch.get());
+        SmartDashboard.putNumber("Last Shot Time", lastShotCount - Timer.getFPGATimestamp());
     }
 }

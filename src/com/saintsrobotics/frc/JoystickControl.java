@@ -39,12 +39,16 @@ public class JoystickControl implements IRobotComponent {
     
     private static final int DRIVE_SLOW_BUTTON = 5;
     private static final double DRIVE_SLOW_VALUE = 0.33;
+    private static final double DRIVE_DEAD_ZONE = 0.13;
     
     private static final int SHOOTER_SET_BUTTON = 1;
     private static final int SHOOTER_SET_ZERO_BUTTON = 7;
     private static final int SHOOTER_UP_BUTTON = 5;
     private static final int SHOOTER_DOWN_BUTTON = 6;
     private static final int SHOOTER_FEED_BUTTON = 8;
+    
+    private static final double SHOOTER_PRESET_VALUE = 0.95;
+    private static final double SHOOTER_INCREMENT_VALUE = 0.005;
     
     private static final int CLIMBER_JOYSTICK_AXIS = 3;
     
@@ -120,7 +124,7 @@ public class JoystickControl implements IRobotComponent {
         
         if(operatorJoystick.getRawButton(SHOOTER_SET_BUTTON))
         {
-            shooterValue = 0.95;
+            shooterValue = SHOOTER_PRESET_VALUE;
         }
         else if(operatorJoystick.getRawButton(SHOOTER_SET_ZERO_BUTTON))
         {
@@ -129,11 +133,11 @@ public class JoystickControl implements IRobotComponent {
         
         if(operatorJoystick.getRawButton(SHOOTER_UP_BUTTON) && shooterValue > 0)
         {
-            shooterValue -= 0.005;
+            shooterValue -= SHOOTER_INCREMENT_VALUE;
         }
         else if(operatorJoystick.getRawButton(SHOOTER_DOWN_BUTTON) && shooterValue < 1)
         {
-            shooterValue += 0.005;
+            shooterValue += SHOOTER_INCREMENT_VALUE;
         }
         
         feederButton = operatorJoystick.getRawButton(SHOOTER_FEED_BUTTON);
@@ -144,19 +148,19 @@ public class JoystickControl implements IRobotComponent {
     }
 
     private void deadZone() {        
-        if (Math.abs(tankLeftValue) < 0.13) {
+        if (Math.abs(tankLeftValue) < DRIVE_DEAD_ZONE) {
             tankLeftValue = 0;
         }
-        if (Math.abs(tankRightValue) < 0.13) {
+        if (Math.abs(tankRightValue) < DRIVE_DEAD_ZONE) {
             tankRightValue = 0;
         }
-        if (Math.abs(arcadeThrottleValue) < 0.13) {
+        if (Math.abs(arcadeThrottleValue) < DRIVE_DEAD_ZONE) {
             arcadeThrottleValue = 0;
         }
-        if (Math.abs(arcadeTurnValue) < 0.13) {
+        if (Math.abs(arcadeTurnValue) < DRIVE_DEAD_ZONE) {
             arcadeTurnValue = 0;
         }
-        if (Math.abs(arcade1TurnValue) < 0.13) {
+        if (Math.abs(arcade1TurnValue) < DRIVE_DEAD_ZONE) {
             arcade1TurnValue = 0;
         }
     }
