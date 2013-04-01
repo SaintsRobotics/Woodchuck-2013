@@ -79,7 +79,7 @@ public class Shooter implements IRobotComponent {
     }
     
     public void robotAuton() {
-        shooterMotor.motor.set(0.95);
+        shooterMotor.motor.set(0.99);
         
         if (cycleCounts % 5 == 0) {
             currentSpeed = 10 * (shooterEncoder.get() - rateCount) / (Timer.getFPGATimestamp() - prevTime);
@@ -87,12 +87,12 @@ public class Shooter implements IRobotComponent {
             prevTime = Timer.getFPGATimestamp();
         }
         
-        if(cycleCounts == 100 || cycleCounts == 250 || cycleCounts == 400 || cycleCounts == 550)
+        if(/*cycleCounts == 100 || */cycleCounts == 250 || cycleCounts == 400 || cycleCounts == 550)
         {
             autoFeed = true;
             lastShotCount = Timer.getFPGATimestamp();
         }
-        else if(cycleCounts == 120 || cycleCounts == 270 || cycleCounts == 420 || cycleCounts == 570)
+        else if(/*cycleCounts == 120 ||*/ cycleCounts == 270 || cycleCounts == 420 || cycleCounts == 570)
         {
             autoFeed = false;
         }
@@ -129,7 +129,7 @@ public class Shooter implements IRobotComponent {
         
         if (feederSwitch.get() && !lastSwitched) {
             feeder.set(Relay.Value.kOff);
-        } else if (controller.getFeederButton() && currentSpeed > 4000) {
+        } else if (controller.getFeederButton()) {
             feeder.set(Relay.Value.kOn);
             lastShotCount = Timer.getFPGATimestamp();
         }
