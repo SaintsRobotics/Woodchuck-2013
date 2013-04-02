@@ -9,6 +9,8 @@ package com.saintsrobotics.frc;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.DriverStation;
+import InsightLT.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,6 +26,7 @@ public class Robot extends IterativeRobot {
     private Shooter shooter;
     private Vision vision;
     private Climber climber;
+    private InsightLT display;
     
     private IRobotComponent[] components;
     
@@ -38,6 +41,8 @@ public class Robot extends IterativeRobot {
         drive = new Drive(controlSystem);
         shooter = new Shooter(vision, controlSystem);
         climber = new Climber(controlSystem);
+        display = new InsightLT(2);
+        display.startDisplay();
         
         components = new IRobotComponent[]{ controlSystem, vision, drive, shooter, climber };
     }
@@ -78,6 +83,15 @@ public class Robot extends IterativeRobot {
     public void disabledInit() {
         Logger.log("The robot has been disabled :(");
         disabledRoutine();
+    }
+    
+    public void disabledPeriodic(){
+        DecimalData BattData = new DecimalData("Battery: ");
+        BattData.setData(DriverStation.getInstance().getBatteryVoltage());
+        StringData teamNum = new StringData();
+        teamNum.setData("------FRC 1899------");
+        display.registerData(BattData, 1);
+        display.registerData(teamNum, 2);
     }
     
     /**
