@@ -27,9 +27,12 @@ public class Robot extends IterativeRobot {
     private Vision vision;
     private Climber climber;
     private InsightLT display;
-    
+    private DecimalData battData;
+    private StringData teamNum;
+    private StringData battWarn;
+
     private IRobotComponent[] components;
-    
+
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -41,12 +44,11 @@ public class Robot extends IterativeRobot {
         drive = new Drive(controlSystem);
         shooter = new Shooter(vision, controlSystem);
         climber = new Climber(controlSystem);
-        display = new InsightLT(2);
-        display.startDisplay();
-        
+        displayInit();
+
         components = new IRobotComponent[]{ controlSystem, vision, drive, shooter, climber };
     }
-    
+
     /**
      * This function is called at the beginning of autonomous.
      */
@@ -61,7 +63,7 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
         autonomousRoutine();
     }
-    
+
     /**
      * This function is called at the beginning of operator control.
      */
@@ -69,14 +71,14 @@ public class Robot extends IterativeRobot {
         Logger.log("Teleop has begun!");
         enabledRoutine();
     }
-    
+
     /**
      * This function is called periodically during operator control.
      */
     public void teleopPeriodic() {
         actionRoutine();
     }
-    
+
     /**
      * This function is called at the beginning of disabled mode.
      */
@@ -84,30 +86,25 @@ public class Robot extends IterativeRobot {
         Logger.log("The robot has been disabled :(");
         disabledRoutine();
     }
-    
+
     public void disabledPeriodic(){
-        DecimalData BattData = new DecimalData("Battery: ");
-        BattData.setData(DriverStation.getInstance().getBatteryVoltage());
-        StringData teamNum = new StringData();
-        teamNum.setData("------FRC 1899------");
-        display.registerData(BattData, 1);
-        display.registerData(teamNum, 2);
+        displayAct();
     }
-    
+
     /**
      * This function is called at the beginning of test mode.
      */
     public void testInit() {
         Logger.log("Test mode has begun.");
     }
-    
+
     /**
      * This function is called periodically during test mode.
      */
     public void testPeriodic() {
-    
+
     }
-    
+
     /**
      * Setup Network Tables, and get the NetworkTable for the SmartDashboard.
      * @return The network table for the SmartDashboard.
@@ -121,26 +118,28 @@ public class Robot extends IterativeRobot {
         catch (Exception exception) {
             Logger.log(exception);
         }
-        
+
         return NetworkTable.getTable("SmartDashboard");
     }
-    
+
     private void disabledRoutine()
     {
         for(int i = 0; i < components.length; i++)
         {
             components[i].robotDisable();
         }
+        display.startDisplay();
     }
-    
+
     private void enabledRoutine()
     {
         for(int i = 0; i < components.length; i++)
         {
             components[i].robotEnable();
         }
+        display.stopDisplay();
     }
-    
+
     private void actionRoutine()
     {
         for(int i = 0; i < components.length; i++)
@@ -148,12 +147,41 @@ public class Robot extends IterativeRobot {
             components[i].act();
         }
     }
-    
+
     private void autonomousRoutine()
     {
         for(int i = 0; i < components.length; i++)
         {
             components[i].robotAuton();
+        }
+    }
+
+    private void displayInit()
+    {
+        display = new InsightLT(InsightLT.TWO_ONE_LINE_ZONES);
+
+        battData = new DecimalData("Battery: ");
+
+        teamNum = new StringData();
+        teamNum.setData("------FRC 1899------");
+
+        battWarn = new StringData();
+        battWarn.setData("BATTERY VOLTAGE LOW!");
+
+        display.registerData(battData, InsightLT.LINE_1);
+        display.registerData(teamNum, InsightLT.LINE_2);
+
+        display.startDisplay();
+    }
+
+    private void displayAct()
+    {
+        double battVoltage = DriverStation.getInstance().getBatteryVoltage();
+        battData.setData(battVoltage);
+        if(battVoltage <= 12)
+        {
+            display.registerData(battWarn, InsightLT.LINE_2);
+            display.setZoneScrollTime(InsightLT.LINE_2, 1000);
         }
     }
 }
