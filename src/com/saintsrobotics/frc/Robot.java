@@ -27,6 +27,7 @@ public class Robot extends IterativeRobot {
     private Vision vision;
     private Climber climber;
     private InsightLT display;
+    private LightShow leds;
     
     private IRobotComponent[] components;
     
@@ -36,6 +37,7 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
         //networkTable = NetworkTable.getTable("camera");
+        leds = new LightShow();
         controlSystem = new JoystickControl();
         vision = new Vision(networkTable);
         drive = new Drive(controlSystem);
@@ -51,6 +53,7 @@ public class Robot extends IterativeRobot {
      * This function is called at the beginning of autonomous.
      */
     public void autonomousInit() {
+        LightShow.SetDefault();
         Logger.log("Autonomous has begun!");
         enabledRoutine();
     }
@@ -66,6 +69,7 @@ public class Robot extends IterativeRobot {
      * This function is called at the beginning of operator control.
      */
     public void teleopInit() {
+        LightShow.SetDefault();
         Logger.log("Teleop has begun!");
         enabledRoutine();
     }
@@ -81,6 +85,7 @@ public class Robot extends IterativeRobot {
      * This function is called at the beginning of disabled mode.
      */
     public void disabledInit() {
+        LightShow.SetDisabled();
         Logger.log("The robot has been disabled :(");
         disabledRoutine();
     }

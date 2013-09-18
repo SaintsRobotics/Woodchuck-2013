@@ -99,7 +99,7 @@ public class JoystickControl implements IRobotComponent {
         
         if(slowButton)
         {
-            slowDriveValues();
+            //slowDriveValues();
             DriverStationComm.printMessage(DriverStationLCD.Line.kUser1, 4, "Slow Mode: ON");
         }
         else
@@ -125,10 +125,12 @@ public class JoystickControl implements IRobotComponent {
         if(operatorJoystick.getRawButton(SHOOTER_SET_BUTTON))
         {
             shooterValue = SHOOTER_PRESET_VALUE;
+            LightShow.SetShootStandby();
         }
         else if(operatorJoystick.getRawButton(SHOOTER_SET_ZERO_BUTTON))
         {
             shooterValue = 0.0;
+            LightShow.SetDefault();
         }
         
         if(operatorJoystick.getRawButton(SHOOTER_UP_BUTTON) && shooterValue > 0)

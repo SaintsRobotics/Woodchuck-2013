@@ -131,6 +131,7 @@ public class Drive implements IRobotComponent {
         if(controller.getRaiseButton())
         {
             raiseServo.setAngle(135);
+            LightShow.SetClimbUnfin();
         }
         else
         {
@@ -179,7 +180,7 @@ public class Drive implements IRobotComponent {
         double rightValue = moveValue + rotateValue;
         double[] motorValues = scale( new double[]{ leftValue, rightValue } );
         
-        System.out.println(leftValue + " : " + rightValue + " :: " + motorValues);
+        //System.out.println(leftValue + " : " + rightValue + " :: " + motorValues);
         
         try
         {

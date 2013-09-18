@@ -87,25 +87,27 @@ public class Shooter implements IRobotComponent {
             prevTime = Timer.getFPGATimestamp();
         }
         
-        if(/*cycleCounts == 100 || */cycleCounts == 250 || cycleCounts == 400 || cycleCounts == 550)
+        if(cycleCounts == 100 || cycleCounts == 250 || cycleCounts == 400 || cycleCounts == 550)
         {
             autoFeed = true;
             lastShotCount = Timer.getFPGATimestamp();
         }
-        else if(/*cycleCounts == 120 ||*/ cycleCounts == 270 || cycleCounts == 420 || cycleCounts == 570)
+        else if(cycleCounts == 120 || cycleCounts == 270 || cycleCounts == 420 || cycleCounts == 570)
         {
             autoFeed = false;
         }
         
         cycleCounts++;
         
-        if (feederSwitch.get() && !lastSwitched) {
+        if (!feederSwitch.get() && !lastSwitched) {
             feeder.set(Relay.Value.kOff);
+            LightShow.SetShootStandby();
         } else if (autoFeed) {
             feeder.set(Relay.Value.kOn);
+            LightShow.SetShoot();
         }
 
-        lastSwitched = feederSwitch.get();
+        lastSwitched = !feederSwitch.get();
         report();
     }
 
@@ -119,7 +121,7 @@ public class Shooter implements IRobotComponent {
          */
 
         if (cycleCounts == 5) {
-            currentSpeed = 10 * (shooterEncoder.get() - rateCount) / (Timer.getFPGATimestamp() - prevTime);
+            currentSpeed = 30 * (shooterEncoder.get() - rateCount) / (Timer.getFPGATimestamp() - prevTime);
             rateCount = shooterEncoder.get();
             prevTime = Timer.getFPGATimestamp();
             cycleCounts = 0;
@@ -127,14 +129,19 @@ public class Shooter implements IRobotComponent {
         }
         cycleCounts++;
         
-        if (feederSwitch.get() && !lastSwitched) {
+        if (!feederSwitch.get() && !lastSwitched) {
             feeder.set(Relay.Value.kOff);
+            if(controller.getShooterSpeed() > 0)
+                LightShow.SetShootStandby();
+            else
+                LightShow.SetDefault();
         } else if (controller.getFeederButton()) {
             feeder.set(Relay.Value.kOn);
+            LightShow.SetShoot();
             lastShotCount = Timer.getFPGATimestamp();
         }
 
-        lastSwitched = feederSwitch.get();
+        lastSwitched = !feederSwitch.get();
         SmartDashboard.putBoolean("Limit", lastSwitched);
         report();
     }
