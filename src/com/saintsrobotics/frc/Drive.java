@@ -15,23 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Drive implements IRobotComponent {
     // Constants
-    /*
-    private static final int JAGUAR_FRONT_LEFT_ID = 1;
-    private static final int JAGUAR_FRONT_RIGHT_ID = 1;
-    private static final int JAGUAR_BACK_LEFT_ID = 2;
-    private static final int JAGUAR_BACK_RIGHT_ID = 2;
-    
-    private static final boolean JAGUAR_FRONT_LEFT_INVERTED = false;
-    private static final boolean JAGUAR_FRONT_RIGHT_INVERTED = false;
-    private static final boolean JAGUAR_BACK_LEFT_INVERTED = false;
-    private static final boolean JAGUAR_BACK_RIGHT_INVERTED = false;
-    
-    private static final CANJaguar.ControlMode CANJAGUAR_CONTROL_MODE =
-            CANJaguar.ControlMode.kPercentVbus;
-    private static final CANJaguar.NeutralMode CANJAGUAR_NEUTRAL_MODE =
-            CANJaguar.NeutralMode.kBrake;
-    */
-    
     private static final int JAGUAR_LEFT_ID = 1;
     private static final int JAGUAR_RIGHT_ID = 2;
     
@@ -48,13 +31,6 @@ public class Drive implements IRobotComponent {
     private JoystickControl controller;
     
     // Instance variables
-    /*
-    private Motor frontLeftMotor;
-    private Motor frontRightMotor;
-    private Motor backLeftMotor;
-    private Motor backRightMotor;
-    */
-    
     private Motor leftMotor;
     private Motor rightMotor;
     
@@ -66,17 +42,6 @@ public class Drive implements IRobotComponent {
     private Servo raiseServo;
     
     public Drive(JoystickControl controller) {
-        /*
-        frontLeftMotor = new Motor(JAGUAR_FRONT_LEFT_ID,
-                JAGUAR_FRONT_LEFT_INVERTED);
-        frontRightMotor = new Motor(JAGUAR_FRONT_RIGHT_ID,
-                JAGUAR_FRONT_RIGHT_INVERTED);
-        backLeftMotor = new Motor(JAGUAR_BACK_LEFT_ID,
-                JAGUAR_BACK_LEFT_INVERTED);
-        backRightMotor = new Motor(JAGUAR_BACK_RIGHT_ID,
-                JAGUAR_BACK_RIGHT_INVERTED);
-        */
-        
         leftMotor = new Motor(JAGUAR_LEFT_ID, JAGUAR_LEFT_INVERTED);
         rightMotor = new Motor(JAGUAR_RIGHT_ID, JAGUAR_RIGHT_INVERTED);
         
@@ -89,29 +54,7 @@ public class Drive implements IRobotComponent {
         raiseServo = new Servo(5);
         
         this.controller = controller;
-        
-        //init();
     }
-    
-    /*
-    private void init() {
-        try {
-            // Set all motors to have the same modes
-            frontLeftMotor.motor.changeControlMode(CANJAGUAR_CONTROL_MODE);
-            frontRightMotor.motor.changeControlMode(CANJAGUAR_CONTROL_MODE);
-            backLeftMotor.motor.changeControlMode(CANJAGUAR_CONTROL_MODE);
-            backRightMotor.motor.changeControlMode(CANJAGUAR_CONTROL_MODE);
-            
-            frontLeftMotor.motor.configNeutralMode(CANJAGUAR_NEUTRAL_MODE);
-            frontRightMotor.motor.configNeutralMode(CANJAGUAR_NEUTRAL_MODE);
-            backLeftMotor.motor.configNeutralMode(CANJAGUAR_NEUTRAL_MODE);
-            backRightMotor.motor.configNeutralMode(CANJAGUAR_NEUTRAL_MODE);
-        }
-        catch (Exception exception) {
-            Logger.log(exception);
-        }
-    }
-    */
     
     public void act()
     {
@@ -153,13 +96,6 @@ public class Drive implements IRobotComponent {
         rightValue = limit(rightValue);
         
         try {
-            /*
-            frontLeftMotor.motor.set(frontLeftMotor.invert() * leftValue);
-            frontRightMotor.motor.set(frontRightMotor.invert() * rightValue);
-            backLeftMotor.motor.set(backLeftMotor.invert() * leftValue);
-            backRightMotor.motor.set(backRightMotor.invert() * rightValue);
-            */
-            
             leftMotor.motor.set(leftMotor.invert() * leftValue);
             rightMotor.motor.set(rightMotor.invert() * rightValue);
         }
@@ -184,13 +120,6 @@ public class Drive implements IRobotComponent {
         
         try
         {
-            /*
-            frontLeftMotor.motor.set(frontLeftMotor.invert() * motorValues[0]);
-            frontRightMotor.motor.set(frontRightMotor.invert() * motorValues[1]);
-            backLeftMotor.motor.set(backLeftMotor.invert() * motorValues[0]);
-            backRightMotor.motor.set(backRightMotor.invert() * motorValues[1]);
-            */
-            
             leftMotor.motor.set(leftMotor.invert() * motorValues[0]);
             rightMotor.motor.set(rightMotor.invert() * motorValues[1]);
         }
@@ -202,13 +131,6 @@ public class Drive implements IRobotComponent {
     
     public void stopDrive() {
         try {
-            /*
-            frontLeftMotor.motor.set(0);
-            frontRightMotor.motor.set(0);
-            backLeftMotor.motor.set(0);
-            backRightMotor.motor.set(0);
-            */
-            
             leftMotor.motor.set(0);
             rightMotor.motor.set(0);
         }
@@ -258,29 +180,8 @@ public class Drive implements IRobotComponent {
         leftEncoder.stop();
         rightEncoder.stop();
         
-        /*
-        frontLeftMotor.motor.disable();
-        frontRightMotor.motor.disable();
-        backLeftMotor.motor.disable();
-        backRightMotor.motor.disable();
-        */
-        
         leftMotor.motor.disable();
         rightMotor.motor.disable();
-        
-        /*
-        try
-        {
-            frontLeftMotor.motor.disableControl();
-            frontRightMotor.motor.disableControl();
-            backLeftMotor.motor.disableControl();
-            backRightMotor.motor.disableControl();
-        }
-        catch (CANTimeoutException e)
-        {
-            Logger.log(e);
-        }
-        */
     }
 
     public void robotEnable() {
@@ -289,20 +190,6 @@ public class Drive implements IRobotComponent {
         
         rightEncoder.reset();
         rightEncoder.start();
-        
-        /*
-        try
-        {
-            frontLeftMotor.motor.enableControl();
-            frontRightMotor.motor.enableControl();
-            backLeftMotor.motor.enableControl();
-            backRightMotor.motor.enableControl();
-        }
-        catch (CANTimeoutException e)
-        {
-            Logger.log(e);
-        }
-        */
     }
 
     public void robotAuton() {

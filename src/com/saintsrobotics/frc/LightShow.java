@@ -24,9 +24,6 @@ public class LightShow {
     
     public LightShow()
     {
-        //LightPin1 = new DigitalOutput(MODULE_NUMBER, PIN1);
-        //LightPin2 = new DigitalOutput(MODULE_NUMBER, PIN2);
-        //LightPin3 = new DigitalOutput(MODULE_NUMBER, PIN3);
         LightShow.SetDefault();
     }
     

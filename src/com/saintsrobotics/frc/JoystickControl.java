@@ -10,13 +10,9 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class JoystickControl implements IRobotComponent {
     // USB ports for the joysticks
-    //private static final int JOYSTICK_LEFT_DRIVE_PORT = 1;
-    //private static final int JOYSTICK_RIGHT_DRIVE_PORT = 2;
     private static final int JOYSTICK_OPERATOR_PORT = 2;
     private static final int JOYSTICK_XBOX_DRIVE_PORT = 1;
     
-    //private Joystick leftDriveJoystick;
-    //private Joystick rightDriveJoystick;
     private Joystick operatorJoystick;
     private Joystick xboxDriveJoystick;
     
@@ -24,14 +20,8 @@ public class JoystickControl implements IRobotComponent {
     
     private final Joystick XBOX_DRIVE_JOYSTICK;
     
-    //private final Joystick TANK_LEFT_JOYSTICK;
-    //private final Joystick TANK_RIGHT_JOYSTICK;
-    
     private static final int TANK_LEFT_JOYSTICK_AXIS = 2;
     private static final int TANK_RIGHT_JOYSTICK_AXIS = 5;
-    
-    //private final Joystick ARCADE_THROTTLE_JOYSTICK;
-    //private final Joystick ARCADE_TURN_JOYSTICK;
     
     private static final int ARCADE_THROTTLE_JOYSTICK_AXIS = 2;
     private static final int ARCADE_TURN_JOYSTICK_AXIS = 4;
@@ -81,12 +71,6 @@ public class JoystickControl implements IRobotComponent {
     }
 
     public void act() {
-        //tankLeftValue = TANK_LEFT_JOYSTICK.getRawAxis(TANK_LEFT_JOYSTICK_AXIS);
-        //tankRightValue = TANK_RIGHT_JOYSTICK.getRawAxis(TANK_RIGHT_JOYSTICK_AXIS);
-        //arcadeThrottleValue = ARCADE_THROTTLE_JOYSTICK.getRawAxis(ARCADE_THROTTLE_JOYSTICK_AXIS);
-        //arcadeTurnValue = ARCADE_TURN_JOYSTICK.getRawAxis(ARCADE_TURN_JOYSTICK_AXIS);
-        //arcade1TurnValue= ARCADE_THROTTLE_JOYSTICK.getRawAxis(ARCADE_TURN_JOYSTICK_AXIS);
-        
         tankLeftValue = XBOX_DRIVE_JOYSTICK.getRawAxis(TANK_LEFT_JOYSTICK_AXIS);
         tankRightValue = XBOX_DRIVE_JOYSTICK.getRawAxis(TANK_RIGHT_JOYSTICK_AXIS);
         arcadeThrottleValue = XBOX_DRIVE_JOYSTICK.getRawAxis(ARCADE_THROTTLE_JOYSTICK_AXIS);
@@ -184,16 +168,8 @@ public class JoystickControl implements IRobotComponent {
     }
     
     public JoystickControl() {
-        //leftDriveJoystick = new Joystick(JOYSTICK_LEFT_DRIVE_PORT);
-        //rightDriveJoystick = new Joystick(JOYSTICK_RIGHT_DRIVE_PORT);
         operatorJoystick = new Joystick(JOYSTICK_OPERATOR_PORT);
         xboxDriveJoystick = new Joystick(JOYSTICK_XBOX_DRIVE_PORT);
-        
-        //TANK_LEFT_JOYSTICK = leftDriveJoystick;
-        //TANK_RIGHT_JOYSTICK = rightDriveJoystick;
-        
-        //ARCADE_THROTTLE_JOYSTICK = leftDriveJoystick;
-        //ARCADE_TURN_JOYSTICK = rightDriveJoystick;
         
         XBOX_DRIVE_JOYSTICK = xboxDriveJoystick;
         
