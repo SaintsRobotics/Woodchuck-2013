@@ -6,17 +6,21 @@ import edu.wpi.first.wpilibj.Jaguar;
  * An abstraction over using motors.
  * @author Saints Robotics
  */
-public class Motor {
+public class Motor
+{
     public final Jaguar motor;
-    private boolean isInverted;
+    private final boolean isInverted;
     
-    public Motor(int motorID, boolean isInverted) {
+    public Motor(int motorID, boolean isInverted)
+    {
         Jaguar newMotor = null;
         
-        try {
+        try
+        {
             newMotor = new Jaguar(motorID);
         }
-        catch (Exception exception) {
+        catch (Exception exception)
+        {
             Logger.log(exception);
         }
         
@@ -24,7 +28,8 @@ public class Motor {
         this.isInverted = isInverted;
     }
     
-    public int invert() {
+    public int invert()
+    {
         return (isInverted ? -1 : 1);
     }
 }

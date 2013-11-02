@@ -1,19 +1,17 @@
 package com.saintsrobotics.frc;
 
-import edu.wpi.first.wpilibj.CANJaguar;
-import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The drive system for the robot.
  * @author Saints Robotics
  */
-public class Drive implements IRobotComponent {
+public class Drive implements IRobotComponent
+{
     // Constants
     private static final int JAGUAR_LEFT_ID = 1;
     private static final int JAGUAR_RIGHT_ID = 2;
@@ -28,20 +26,21 @@ public class Drive implements IRobotComponent {
     private static final double ENCODER_CODES_PER_REV = 10;
     private static final double ENCODER_GEARING_RATIO = 10;
     
-    private JoystickControl controller;
+    private final JoystickControl controller;
     
     // Instance variables
-    private Motor leftMotor;
-    private Motor rightMotor;
+    private final Motor leftMotor;
+    private final Motor rightMotor;
     
-    private Encoder leftEncoder;
-    private DigitalInput leftEncoderInput;
-    private Encoder rightEncoder;
-    private DigitalInput rightEncoderInput;
+    private final Encoder leftEncoder;
+    private final DigitalInput leftEncoderInput;
+    private final Encoder rightEncoder;
+    private final DigitalInput rightEncoderInput;
     
-    private Servo raiseServo;
+    private final Servo raiseServo;
     
-    public Drive(JoystickControl controller) {
+    public Drive(JoystickControl controller)
+    {
         leftMotor = new Motor(JAGUAR_LEFT_ID, JAGUAR_LEFT_INVERTED);
         rightMotor = new Motor(JAGUAR_RIGHT_ID, JAGUAR_RIGHT_INVERTED);
         
@@ -58,11 +57,11 @@ public class Drive implements IRobotComponent {
     
     public void act()
     {
-        if(controller.getControlMode().value == JoystickControl.ControlMode.arcadeDrive.value)
+        if (controller.getControlMode().value == JoystickControl.ControlMode.arcadeDrive.value)
         {
             arcadeDrive(controller.getArcadeValues());
         }
-        else if(controller.getControlMode().value == JoystickControl.ControlMode.tankDrive.value)
+        else if (controller.getControlMode().value == JoystickControl.ControlMode.tankDrive.value)
         {
             tankDrive(controller.getTankValues());
         }
@@ -71,7 +70,7 @@ public class Drive implements IRobotComponent {
             arcadeDrive(controller.getArcade1Values());
         }
         
-        if(controller.getRaiseButton())
+        if (controller.getRaiseButton())
         {
             raiseServo.setAngle(135);
             LightShow.SetClimbUnfin();
@@ -91,15 +90,18 @@ public class Drive implements IRobotComponent {
         tankDrive(motorValues[0], motorValues[1]);
     }
     
-    public void tankDrive(double leftValue, double rightValue) {
+    public void tankDrive(double leftValue, double rightValue)
+    {
         leftValue = limit(leftValue);
         rightValue = limit(rightValue);
         
-        try {
+        try
+        {
             leftMotor.motor.set(leftMotor.invert() * leftValue);
             rightMotor.motor.set(rightMotor.invert() * rightValue);
         }
-        catch (Exception exception) {
+        catch (Exception exception)
+        {
             Logger.log(exception);
         }
     }
@@ -111,7 +113,8 @@ public class Drive implements IRobotComponent {
         arcadeDrive(motorValues[0], motorValues[1]);
     }
     
-    public void arcadeDrive(double moveValue, double rotateValue) {
+    public void arcadeDrive(double moveValue, double rotateValue)
+    {
         double leftValue = moveValue - rotateValue;
         double rightValue = moveValue + rotateValue;
         double[] motorValues = scale( new double[]{ leftValue, rightValue } );
@@ -129,41 +132,47 @@ public class Drive implements IRobotComponent {
         }
     }
     
-    public void stopDrive() {
-        try {
+    public void stopDrive()
+    {
+        try
+        {
             leftMotor.motor.set(0);
             rightMotor.motor.set(0);
         }
-        catch (Exception exception) {
+        catch (Exception exception)
+        {
             Logger.log(exception);
         }
     }
     
-    public double limit(double value) {
-        if (value > 1) {
+    public double limit(double value)
+    {
+        if (value > 1)
+        {
             return 1;
         }
-        if (value < -1) {
+        if (value < -1)
+        {
             return -1;
         }
         
         return value;
     }
     
-    public double[] scale (double[] values)
+    public double[] scale(double[] values)
     {
         double scale = 1.0;
         double newValues[] = new double[values.length];
         
-        for(int i = 0; i < values.length; i++)
+        for (int i = 0; i < values.length; i++)
         {
             double currentScale = 1 / Math.abs(values[i]);
             scale = scale > currentScale ? currentScale : scale;
         }
         
-        if(scale < 1.0)
+        if (scale < 1.0)
         {
-            for(int i = 0; i < values.length; i++)
+            for (int i = 0; i < values.length; i++)
             {
                 newValues[i] = scale * values[i];
             }
@@ -176,7 +185,8 @@ public class Drive implements IRobotComponent {
         }
     }
 
-    public void robotDisable() {
+    public void robotDisable()
+    {
         leftEncoder.stop();
         rightEncoder.stop();
         
@@ -184,7 +194,8 @@ public class Drive implements IRobotComponent {
         rightMotor.motor.disable();
     }
 
-    public void robotEnable() {
+    public void robotEnable()
+    {
         leftEncoder.reset();
         leftEncoder.start();
         
@@ -192,10 +203,12 @@ public class Drive implements IRobotComponent {
         rightEncoder.start();
     }
 
-    public void robotAuton() {
+    public void robotAuton()
+    {
     }
     
-    private void report() {
+    private void report()
+    {
         SmartDashboard.putNumber("Arcade Throttle", controller.getArcadeValues()[0]);
         SmartDashboard.putNumber("Arcade Turn", controller.getArcadeValues()[1]);
     }

@@ -8,7 +8,8 @@ package com.saintsrobotics.frc;
  *
  * @author huadianz
  */
-public interface IRobotComponent {
+public interface IRobotComponent
+{
     public void robotDisable();
     public void robotEnable();
     public void robotAuton();

@@ -8,14 +8,15 @@ package com.saintsrobotics.frc;
  *
  * @author huadianz
  */
-public class MovingAverage {
-
-    private int size;
+public class MovingAverage
+{
+    private final int size;
     private double total = 0d;
     private int index = 0;
-    private double samples[];
+    private final double samples[];
 
-    public MovingAverage(int size) {
+    public MovingAverage(int size)
+    {
         this.size = size;
         samples = new double[size];
         for (int i = 0; i < size; i++)
@@ -24,7 +25,8 @@ public class MovingAverage {
         }
     }
 
-    public void add(double x) {
+    public void add(double x)
+    {
         total -= samples[index];
         samples[index] = x;
         total += x;
@@ -34,7 +36,8 @@ public class MovingAverage {
         }
     }
 
-    public double getAverage() {
+    public double getAverage()
+    {
         return total / size;
     }   
 }

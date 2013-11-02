@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DriverStation;
 import InsightLT.*;
+import java.io.IOException;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -19,7 +20,8 @@ import InsightLT.*;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot {
+public class Robot extends IterativeRobot
+{
     private JoystickControl controlSystem;
     private Drive drive;
     private NetworkTable networkTable;
@@ -39,7 +41,8 @@ public class Robot extends IterativeRobot {
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
-    public void robotInit() {
+    public void robotInit()
+    {
         //networkTable = NetworkTable.getTable("camera");
         leds = new LightShow();
         controlSystem = new JoystickControl();
@@ -55,7 +58,8 @@ public class Robot extends IterativeRobot {
     /**
      * This function is called at the beginning of autonomous.
      */
-    public void autonomousInit() {
+    public void autonomousInit()
+    {
         LightShow.SetDefault();
         Logger.log("Autonomous has begun!");
         enabledRoutine();
@@ -64,14 +68,16 @@ public class Robot extends IterativeRobot {
     /**
      * This function is called periodically during autonomous.
      */
-    public void autonomousPeriodic() {
+    public void autonomousPeriodic()
+    {
         autonomousRoutine();
     }
 
     /**
      * This function is called at the beginning of operator control.
      */
-    public void teleopInit() {
+    public void teleopInit()
+    {
         LightShow.SetDefault();
         Logger.log("Teleop has begun!");
         enabledRoutine();
@@ -80,48 +86,55 @@ public class Robot extends IterativeRobot {
     /**
      * This function is called periodically during operator control.
      */
-    public void teleopPeriodic() {
+    public void teleopPeriodic()
+    {
         actionRoutine();
     }
 
     /**
      * This function is called at the beginning of disabled mode.
      */
-    public void disabledInit() {
+    public void disabledInit()
+    {
         LightShow.SetDisabled();
         Logger.log("The robot has been disabled :(");
         disabledRoutine();
     }
 
-    public void disabledPeriodic(){
+    public void disabledPeriodic()
+    {
         displayAct();
     }
 
     /**
      * This function is called at the beginning of test mode.
      */
-    public void testInit() {
+    public void testInit()
+    {
         Logger.log("Test mode has begun.");
     }
 
     /**
      * This function is called periodically during test mode.
      */
-    public void testPeriodic() {
-
+    public void testPeriodic()
+    {
     }
 
     /**
      * Setup Network Tables, and get the NetworkTable for the SmartDashboard.
      * @return The network table for the SmartDashboard.
      */
-    private NetworkTable getNetworkTable() {
+    private NetworkTable getNetworkTable()
+    {
         NetworkTable.setTeam(1899);
         NetworkTable.setServerMode();
-        try {
+        try
+        {
             NetworkTable.initialize();
         }
-        catch (Exception exception) {
+        catch (IOException exception)
+        {
             Logger.log(exception);
         }
 
@@ -130,7 +143,7 @@ public class Robot extends IterativeRobot {
 
     private void disabledRoutine()
     {
-        for(int i = 0; i < components.length; i++)
+        for (int i = 0; i < components.length; i++)
         {
             components[i].robotDisable();
         }
@@ -139,7 +152,7 @@ public class Robot extends IterativeRobot {
 
     private void enabledRoutine()
     {
-        for(int i = 0; i < components.length; i++)
+        for (int i = 0; i < components.length; i++)
         {
             components[i].robotEnable();
         }
@@ -148,7 +161,7 @@ public class Robot extends IterativeRobot {
 
     private void actionRoutine()
     {
-        for(int i = 0; i < components.length; i++)
+        for (int i = 0; i < components.length; i++)
         {
             components[i].act();
         }
@@ -156,7 +169,7 @@ public class Robot extends IterativeRobot {
 
     private void autonomousRoutine()
     {
-        for(int i = 0; i < components.length; i++)
+        for (int i = 0; i < components.length; i++)
         {
             components[i].robotAuton();
         }
@@ -184,7 +197,7 @@ public class Robot extends IterativeRobot {
     {
         double battVoltage = DriverStation.getInstance().getBatteryVoltage();
         battData.setData(battVoltage);
-        if(battVoltage <= 12)
+        if (battVoltage <= 12)
         {
             display.registerData(battWarn, InsightLT.LINE_2);
             display.setZoneScrollTime(InsightLT.LINE_2, 1000);

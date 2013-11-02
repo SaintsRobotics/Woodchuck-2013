@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.DriverStationLCD;
  * @author Saints Robotics
  */
 public class DriverStationComm {
-    private static DriverStation driverStation;
-    private static DriverStationEnhancedIO enhancedIO;
-    private static DriverStationLCD LCD;
+    private static final DriverStation driverStation;
+    private static final DriverStationEnhancedIO enhancedIO;
+    private static final DriverStationLCD LCD;
     
     static {
         driverStation = DriverStation.getInstance();

@@ -10,7 +10,8 @@ import edu.wpi.first.wpilibj.DigitalOutput;
  *
  * @author Saints Robotics
  */
-public class LightShow {
+public class LightShow
+{
     
     private static final int MODULE_NUMBER = 1;
     
@@ -18,9 +19,9 @@ public class LightShow {
     private static final int PIN2 = 13;
     private static final int PIN3 = 14;
     
-    private static DigitalOutput LightPin1 = new DigitalOutput(MODULE_NUMBER, PIN1);
-    private static DigitalOutput LightPin2 = new DigitalOutput(MODULE_NUMBER, PIN2);
-    private static DigitalOutput LightPin3 = new DigitalOutput(MODULE_NUMBER, PIN3);
+    private static final DigitalOutput LightPin1 = new DigitalOutput(MODULE_NUMBER, PIN1);
+    private static final DigitalOutput LightPin2 = new DigitalOutput(MODULE_NUMBER, PIN2);
+    private static final DigitalOutput LightPin3 = new DigitalOutput(MODULE_NUMBER, PIN3);
     
     public LightShow()
     {

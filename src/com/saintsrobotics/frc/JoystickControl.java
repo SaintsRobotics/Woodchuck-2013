@@ -8,13 +8,14 @@ import edu.wpi.first.wpilibj.Joystick;
  * The joystick control for the robot.
  * @author Saints Robotics
  */
-public class JoystickControl implements IRobotComponent {
+public class JoystickControl implements IRobotComponent
+{
     // USB ports for the joysticks
     private static final int JOYSTICK_OPERATOR_PORT = 2;
     private static final int JOYSTICK_XBOX_DRIVE_PORT = 1;
     
-    private Joystick operatorJoystick;
-    private Joystick xboxDriveJoystick;
+    private final Joystick operatorJoystick;
+    private final Joystick xboxDriveJoystick;
     
     private int CONTROL_MODE;
     
@@ -57,10 +58,12 @@ public class JoystickControl implements IRobotComponent {
     private boolean feederButton = false;
     private boolean raiseButton = false;
     
-    public void robotDisable() {
+    public void robotDisable()
+    {
     }
 
-    public void robotEnable() {
+    public void robotEnable()
+    {
         tankLeftValue = 0.0;
         tankRightValue = 0.0;
         arcadeThrottleValue = 0.0;
@@ -70,7 +73,8 @@ public class JoystickControl implements IRobotComponent {
         feederButton = false;
     }
 
-    public void act() {
+    public void act()
+    {
         tankLeftValue = XBOX_DRIVE_JOYSTICK.getRawAxis(TANK_LEFT_JOYSTICK_AXIS);
         tankRightValue = XBOX_DRIVE_JOYSTICK.getRawAxis(TANK_RIGHT_JOYSTICK_AXIS);
         arcadeThrottleValue = XBOX_DRIVE_JOYSTICK.getRawAxis(ARCADE_THROTTLE_JOYSTICK_AXIS);
@@ -81,7 +85,7 @@ public class JoystickControl implements IRobotComponent {
         curveTurnValues();
         deadZone();
         
-        if(slowButton)
+        if (slowButton)
         {
             //slowDriveValues();
             DriverStationComm.printMessage(DriverStationLCD.Line.kUser1, 4, "Slow Mode: ON");
@@ -91,37 +95,37 @@ public class JoystickControl implements IRobotComponent {
             DriverStationComm.printMessage(DriverStationLCD.Line.kUser1, 4, "Slow Mode: OFF");
         }
         
-        if(XBOX_DRIVE_JOYSTICK.getRawButton(4))
+        if (XBOX_DRIVE_JOYSTICK.getRawButton(4))
         {
             controlMode = ControlMode.tankDrive;
         }
         
-        if(XBOX_DRIVE_JOYSTICK.getRawButton(3))
+        if (XBOX_DRIVE_JOYSTICK.getRawButton(3))
         {
             controlMode = ControlMode.arcadeDrive;
         }
         
-        if(XBOX_DRIVE_JOYSTICK.getRawButton(2))
+        if (XBOX_DRIVE_JOYSTICK.getRawButton(2))
         {
             controlMode = ControlMode.arcadeDrive1;
         }
         
-        if(operatorJoystick.getRawButton(SHOOTER_SET_BUTTON))
+        if (operatorJoystick.getRawButton(SHOOTER_SET_BUTTON))
         {
             shooterValue = SHOOTER_PRESET_VALUE;
             LightShow.SetShootStandby();
         }
-        else if(operatorJoystick.getRawButton(SHOOTER_SET_ZERO_BUTTON))
+        else if (operatorJoystick.getRawButton(SHOOTER_SET_ZERO_BUTTON))
         {
             shooterValue = 0.0;
             LightShow.SetDefault();
         }
         
-        if(operatorJoystick.getRawButton(SHOOTER_UP_BUTTON) && shooterValue > 0)
+        if (operatorJoystick.getRawButton(SHOOTER_UP_BUTTON) && shooterValue > 0)
         {
             shooterValue -= SHOOTER_INCREMENT_VALUE;
         }
-        else if(operatorJoystick.getRawButton(SHOOTER_DOWN_BUTTON) && shooterValue < 1)
+        else if (operatorJoystick.getRawButton(SHOOTER_DOWN_BUTTON) && shooterValue < 1)
         {
             shooterValue += SHOOTER_INCREMENT_VALUE;
         }
@@ -133,28 +137,36 @@ public class JoystickControl implements IRobotComponent {
         climberValue = operatorJoystick.getRawAxis(CLIMBER_JOYSTICK_AXIS);
     }
 
-    private void deadZone() {        
-        if (Math.abs(tankLeftValue) < DRIVE_DEAD_ZONE) {
+    private void deadZone()
+    {        
+        if (Math.abs(tankLeftValue) < DRIVE_DEAD_ZONE)
+        {
             tankLeftValue = 0;
         }
-        if (Math.abs(tankRightValue) < DRIVE_DEAD_ZONE) {
+        if (Math.abs(tankRightValue) < DRIVE_DEAD_ZONE)
+        {
             tankRightValue = 0;
         }
-        if (Math.abs(arcadeThrottleValue) < DRIVE_DEAD_ZONE) {
+        if (Math.abs(arcadeThrottleValue) < DRIVE_DEAD_ZONE)
+        {
             arcadeThrottleValue = 0;
         }
-        if (Math.abs(arcadeTurnValue) < DRIVE_DEAD_ZONE) {
+        if (Math.abs(arcadeTurnValue) < DRIVE_DEAD_ZONE)
+        {
             arcadeTurnValue = 0;
         }
-        if (Math.abs(arcade1TurnValue) < DRIVE_DEAD_ZONE) {
+        if (Math.abs(arcade1TurnValue) < DRIVE_DEAD_ZONE)
+        {
             arcade1TurnValue = 0;
         }
     }
 
-    public void robotAuton() {
+    public void robotAuton()
+    {
     }
     
-    public static class ControlMode{
+    public static class ControlMode
+    {
         public final int value;
         
         public static final ControlMode arcadeDrive = new ControlMode(0);
@@ -167,23 +179,24 @@ public class JoystickControl implements IRobotComponent {
         }
     }
     
-    public JoystickControl() {
+    public JoystickControl()
+    {
         operatorJoystick = new Joystick(JOYSTICK_OPERATOR_PORT);
         xboxDriveJoystick = new Joystick(JOYSTICK_XBOX_DRIVE_PORT);
         
         XBOX_DRIVE_JOYSTICK = xboxDriveJoystick;
         
-        //Default driving mode
+        // Default driving mode
         controlMode = ControlMode.arcadeDrive;
     }
     
     public ControlMode getControlMode()
     {
-        if(controlMode.value == ControlMode.arcadeDrive.value)
+        if (controlMode.value == ControlMode.arcadeDrive.value)
         {
             DriverStationComm.printMessage(DriverStationLCD.Line.kUser1, 1, "Control mode: Arcade 2 Joystick");
         }
-        else if(controlMode.value == ControlMode.tankDrive.value)    
+        else if (controlMode.value == ControlMode.tankDrive.value)    
         {
             DriverStationComm.printMessage(DriverStationLCD.Line.kUser1, 1, "Control mode: Tank");
         }
