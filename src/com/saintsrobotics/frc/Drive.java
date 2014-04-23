@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Drive implements IRobotComponent
 {
     // Constants
-    private static final int JAGUAR_LEFT_ID = 1;
+    private static final int JAGUAR_LEFT_ID = 3;
     private static final int JAGUAR_RIGHT_ID = 2;
     
     private static final boolean JAGUAR_LEFT_INVERTED = true;
