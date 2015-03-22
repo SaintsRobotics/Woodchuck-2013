@@ -1,4 +1,4 @@
-FRC-2013
+Woodchuck - 2013
 ========
 
-The code for the 2013 FRC competition, Ultimate Ascent.
+Woodchuck's code for the 2013 FRC competition, Ultimate Ascent.
